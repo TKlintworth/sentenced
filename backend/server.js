@@ -7,7 +7,7 @@ const server = http.createServer(app);
 const io = socketIo(server);
 
 app.get('/', (req, res) => {
-  res.send('<h1>Hello world</h1>'); // Placeholder for your Svelte app
+  res.send('<h1>Sentencio</h1>'); // Placeholder for your Svelte app
 });
 
 io.on('connection', (socket) => {

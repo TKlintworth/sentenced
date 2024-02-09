@@ -1,8 +1,12 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<h1>Sentencio</h1>
+<p>Create silly sentences with your friends!</p>
+<button>Host Game</button>
+<button>Join Game</button>
+
 <script>
     import { onMount } from 'svelte';
     import io from 'socket.io-client';
+    import Button from '../lib/Button.svelte';
   
     let socket;
   

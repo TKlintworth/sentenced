@@ -17,13 +17,12 @@
     }
 </script>
 
-<button class="btn" on:click={logSomeStuff}>
+<button class="btn bg-de-york-700" on:click={logSomeStuff}>
     Hello {name}! Click me!
 </button>
 
 <style>
     button {
-        background-color: #4CAF50;
         border: none;
         color: white;
         padding: 15px 32px;

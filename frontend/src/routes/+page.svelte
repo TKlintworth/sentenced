@@ -1,7 +1,7 @@
 <h1>Sentencio</h1>
 <p>Create silly sentences with your friends!</p>
-<button>Host Game</button>
-<button>Join Game</button>
+<Button text="Tristan"></Button>
+<Button></Button>
 
 <script>
     import { onMount } from 'svelte';

@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* CSS HEX */
+:root{
+    --tea-green: #dbf9b8ff;
+    --peach: #f3b391ff;
+    --dim-gray: #6d676eff;
+    --carolina-blue: #7cafc4ff;
+    --black: #08090aff;
+    
+    /* CSS HSL */
+    --tea-green: hsla(88, 84%, 85%, 1);
+    --peach: hsla(21, 80%, 76%, 1);
+    --dim-gray: hsla(291, 3%, 42%, 1);
+    --carolina-blue: hsla(198, 38%, 63%, 1);
+    --black: hsla(210, 11%, 4%, 1);
+}

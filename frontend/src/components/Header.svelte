@@ -1,0 +1,65 @@
+<script>
+
+</script>
+
+<!-- Header.svelte -->
+<div class="header">
+    <div class="logo-section">
+        <img src="/favicon_io/favicon-32x32.png" alt="Game Icon" class="game-icon">
+        <span>Sentencio</span>
+    </div>
+    <div class="user-section">
+        <button class="icon-button">
+            Profile
+        </button>
+        <button class="icon-button">
+            Settings
+        </button>
+    </div>
+</div>
+
+
+<style>
+/* Header.svelte <style> */
+    .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #2C3E50; /* Dark shade of blue */
+    color: #ECF0F1; /* Light grey */
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+}
+
+.game-icon {
+    width: 40px; /* Adjust based on your icon's size */
+    height: auto;
+    margin-right: 10px;
+}
+
+span {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.icon-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 15px;
+}
+
+.icon {
+    width: 25px; /* Adjust based on your icon's size */
+    height: auto;
+}
+
+.icon-button:hover {
+    opacity: 0.8;
+}
+
+</style>

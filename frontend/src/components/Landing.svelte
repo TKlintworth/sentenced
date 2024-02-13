@@ -1,19 +1,23 @@
 <script>
     function hostGame() {
-    // Implementation for hosting a game
+        // Implementation for hosting a game
+        console.warn("Host game not implemented yet");
     }
 
     function joinGame() {
-    // Implementation for joining a game
+        // Implementation for joining a game
+        console.warn("Join game not implemented yet")
     }
 </script>
 
-<div class="landing-page">
-    <h1>Sentencio</h1>
-    <p class="subtext">Fun for the whole friend group :)</p>
+<div class="landing-page bg-hit-pink-200">
+    <div>
+        <h1 class="title-animation">Sentencio</h1>
+        <p class="subtext subtext-animation">Fun for the whole friend group :)</p>
+    </div>
     <div class="buttons">
-        <button class="btn bg-de-york-500 text-cod-gray-100 hover:bg-de-york-600" onclick="hostGame()">Host Game</button>
-        <button class="btn bg-de-york-500 text-cod-gray-100 hover:bg-de-york-600" onclick="joinGame()">Join Game</button>
+        <button class="btn bg-de-york-500  hover:bg-de-york-600" on:click={hostGame}>Host Game</button>
+        <button class="btn bg-de-york-500  hover:bg-de-york-600" on:click={joinGame}>Join Game</button>
     </div>
 </div>
 
@@ -21,39 +25,58 @@
 <style>
     .landing-page {
         display: grid;
-        grid-template-columns: 10 1fr;
-        grid-template-rows: 10 1fr;
+        grid-template-columns: repeat(1, 1fr);
+        grid-template-rows: 10em 1fr 2fr;
         place-items: center;
         text-align: center;
-        padding: 50px 20px; /* Adjust padding as needed */
-        min-height: calc(100vh - 120px); /* Adjust based on header/footer height */
+        padding: 10em;
+    }
+    .title-animation {
+        animation: fadeInUp 1s ease-out forwards;
+    }
+
+    .subtext-animation {
+        animation: fadeInUp 1.5s ease-out forwards;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     h1 {
-        font-size: 4rem;
+        margin: 0;
+        font-size: 4.5rem;
         color: #333; /* Dark for contrast */
-    }
-
-    .subtext {
-        font-size: 1.2rem;
-        color: #555; /* Slightly lighter */
-        margin-bottom: 30px;
     }
 
     .buttons {
         display: flex;
-        justify-content: center;
-        gap: 20px; /* Space between buttons */
+        flex-direction: column;
+        align-items: center;
+        gap: 15px; /* Space between buttons */
+    }
+
+    .subtext {
+        font-size: 1.25rem;
+        color: #555; /* Slightly lighter */
+        margin: 10px 0 30px;
+    }
+
+    .buttons {
+        grid-column: auto;
+        grid-row: auto;
     }
 
     .btn {
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-        background-color: #44c767; /* Vibrant green */
+        padding: 0px 40px;
+        font-size: 1.5em;
         color: #ffffff; /* Nearly white */
-        font-size: 1rem;
     }
 </style>

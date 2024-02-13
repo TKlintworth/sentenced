@@ -3,7 +3,7 @@
 </script>
 
 <!-- Header.svelte -->
-<div class="header">
+<div class="header bg-cod-gray-600">
     <div class="logo-section">
         <img src="/favicon_io/favicon-32x32.png" alt="Game Icon" class="game-icon">
         <span>Sentencio</span>
@@ -26,7 +26,6 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    background-color: #2C3E50; /* Dark shade of blue */
     color: #ECF0F1; /* Light grey */
 }
 

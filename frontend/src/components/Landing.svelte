@@ -1,16 +1,21 @@
 <script>
+    import { goto } from '$app/navigation';
+
     function hostGame() {
         // Implementation for hosting a game
-        console.warn("Host game not implemented yet");
+        
+        goto('/host');
+
     }
 
     function joinGame() {
         // Implementation for joining a game
-        console.warn("Join game not implemented yet")
+
+        goto('/join');
     }
 </script>
 
-<div class="landing-page bg-hit-pink-200">
+<div class="landing-page bg-white">
     <div>
         <h1 class="title-animation">Sentencio</h1>
         <p class="subtext subtext-animation">Fun for the whole friend group :)</p>
@@ -23,6 +28,10 @@
 
 
 <style>
+    /* https://www.happyhues.co/palettes/15 */
+    button {
+        background: #2C7A44;
+    }
     .landing-page {
         display: grid;
         grid-template-columns: repeat(1, 1fr);
@@ -61,17 +70,14 @@
         flex-direction: column;
         align-items: center;
         gap: 15px; /* Space between buttons */
+        grid-column: auto;
+        grid-row: auto;
     }
 
     .subtext {
         font-size: 1.25rem;
         color: #555; /* Slightly lighter */
         margin: 10px 0 30px;
-    }
-
-    .buttons {
-        grid-column: auto;
-        grid-row: auto;
     }
 
     .btn {

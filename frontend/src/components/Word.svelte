@@ -1,6 +1,6 @@
 <script>
     export let word;
-    import { draggable, dropzone } from "$lib/dnd";
+    import { draggable } from "$lib/dnd";
     
 </script>
 

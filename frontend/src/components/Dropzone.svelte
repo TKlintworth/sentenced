@@ -24,7 +24,7 @@
     }
 
     :global(.droppable) {
-        outline: 0.1em solid red;
+        outline: 0.25em solid red;
         outline-offset: 0.25em;
         border-radius: 1em;
     }

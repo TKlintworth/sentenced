@@ -8,11 +8,11 @@
 
 <div class="playScreenContainer">
     <div class="topWordContainers">
-        <WordContainer></WordContainer>
-        <WordContainer></WordContainer>
+        <WordContainer type="words"></WordContainer>
+        <WordContainer type="words"></WordContainer>
     </div>
-    <Dropzone></Dropzone>
-    <WordContainer></WordContainer>
+    <WordContainer type="sentence"></WordContainer>
+    <WordContainer type="words"></WordContainer>
 </div>
 
 
@@ -21,6 +21,8 @@
         display: flex;
         margin-top: 1%;
     }
+
+    
 </style>
 
 

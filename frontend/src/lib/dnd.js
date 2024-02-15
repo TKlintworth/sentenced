@@ -30,7 +30,15 @@ export function dropzone(node, options){
     }
 
     function handle_dragenter(event){
+        console.warn('dragenter', event);
         //event.preventDefault();
+        // Make sure that only the parent dropzone node gets the dragover class
+        if(event.target !== node){
+            
+        }
+
+        console.log("dropzone node", node);
+        console.log('dragenter', event.target);
         event.target.classList.add(state.dragover_class);
     }
 

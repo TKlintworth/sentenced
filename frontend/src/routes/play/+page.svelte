@@ -1,5 +1,4 @@
 <script>    
-    import Dropzone from '../../components/Dropzone.svelte';
     import WordContainer from '../../components/WordContainer.svelte';
 
     import { draggable } from "$lib/dnd";

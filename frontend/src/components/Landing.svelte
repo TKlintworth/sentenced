@@ -13,6 +13,12 @@
 
         goto('/join');
     }
+    
+    function enterGameCode() {
+        // Implementation for entering a game code
+
+        //goto('/code');
+    }
 </script>
 
 <div class="landing-page bg-white">
@@ -21,8 +27,9 @@
         <p class="subtext subtext-animation">Fun for the whole friend group :)</p>
     </div>
     <div class="buttons">
-        <button class="btn bg-de-york-500  hover:bg-de-york-600" on:click={hostGame}>Host Game</button>
-        <button class="btn bg-de-york-500  hover:bg-de-york-600" on:click={joinGame}>Join Game</button>
+        <button class="btn bg-de-york-500  hover:bg-de-york-600" on:click={hostGame}>Create Lobby</button>
+        <button class="btn bg-de-york-500  hover:bg-de-york-600" on:click={joinGame}>Server Browser</button>
+        <button class="btn bg-de-york-500  hover:bg-de-york-600" on:click={enterGameCode}>Enter Game Code</button>
     </div>
 </div>
 
@@ -32,10 +39,13 @@
     button {
         background: #2C7A44;
     }
+
     .landing-page {
-        display: grid;
+        /* display: grid;
         grid-template-columns: repeat(1, 1fr);
-        grid-template-rows: 10em 1fr 2fr;
+        grid-template-rows: 10em 1fr 2fr; */
+        display: flex;
+        flex-direction: column;
         place-items: center;
         text-align: center;
         padding: 10em;

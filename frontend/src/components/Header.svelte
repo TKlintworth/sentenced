@@ -5,7 +5,9 @@
 <!-- Header.svelte -->
 <div class="header bg-cod-gray-600">
     <div class="logo-section">
-        <img src="/favicon_io/favicon-32x32.png" alt="Game Icon" class="game-icon">
+        <a href="/">
+            <img src="/favicon_io/favicon-32x32.png" alt="Game Icon" class="game-icon" />
+        </a>
         <span>Sentencio</span>
     </div>
     <div class="user-section">

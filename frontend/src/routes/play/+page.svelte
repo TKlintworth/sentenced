@@ -44,6 +44,7 @@
         display: flex;
         width: 100vw;
         align-items: stretch;
+        flex-basis: initial;
     }
 
     .bottomWordContainers {

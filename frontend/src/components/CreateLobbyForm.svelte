@@ -1,5 +1,15 @@
 <script>
     import { goto } from '$app/navigation';
+    import { onMount } from 'svelte';
+    import io from 'socket.io-client';
+    
+    let socket = io('http://localhost:3000');
+
+    socket.on('connect', () => {
+      console.log('Connected to server in create lobby form');
+    });
+
+    let passwordBoolean = false;
 
     function cancelCreateLobby() {
         console.log('Canceling lobby creation');
@@ -9,7 +19,25 @@
 
     function createLobby() {
         // Implementation for creating a lobby
-        goto('/lobby');
+        // Need to validate our data and send a socket io client event to the server
+        console.log('Client side creating lobby');
+        let password = ''
+        if (passwordBoolean) {
+            password = document.getElementById('grid-password').value;
+        } 
+        socket.emit('create-lobby', {
+            serverName: document.getElementById('server-name').value,
+            password: password,
+            players: document.getElementById('grid-state').value,
+            hostPlayerName: 'Tristan'
+        });
+        
+        //goto('/lobby');
+    }
+
+    function handlePasswordChecked(event) {
+        passwordBoolean = event.target.checked;
+        console.log('Password checked: ', passwordBoolean);
     }
 
 </script>
@@ -30,11 +58,16 @@
         <div class="flex flex-wrap -mx-3 mb-6">
            
           <div class="w-full px-3">
-            <input checked id="checked-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+            <input type="checkbox" class="checkbox" bind:value={passwordBoolean} on:change={handlePasswordChecked} />
             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
               Password
             </label>
-            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="password">
+            <!-- Disable input if passwordBoolean is false -->
+            {#if passwordBoolean}
+              <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-password" type="password">
+            {:else}
+              <input aria-label="disabled input" class="mb-5 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" value="Disabled input" disabled>
+            {/if}
           </div>
         </div>
         <div class="flex flex-wrap -mx-3 mb-2">

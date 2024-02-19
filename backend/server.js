@@ -12,14 +12,17 @@ const io = socketIo(server);
 
 io.on('connection', (socket) => {
   console.log('a user connected');
+
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });
+
+  socket.on('create-lobby', (lobbyData) => {
+    console.log('Server side createLobby');
+    console.log(lobbyData);
+  });
 });
 
-io.on('createLobby', (socket) => {
-  console.log('createLobby');
-});
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -5,7 +5,6 @@
         // Implementation for hosting a game
         
         goto('/host');
-
     }
 
     function joinGame() {
@@ -14,13 +13,28 @@
         goto('/join');
     }
     
-    function enterGameCode() {
-        // Implementation for entering a game code
-
-
-
-        //goto('/code');
+    function joinLobbyUsingGameCode() {
+        // Implementation for joining a game using a game code
+        goto('/join');
     }
+
+    let nameEntered = false;
+    let playButtonText = 'Play';
+    let name = 'Player';
+
+    function playClickedHandler() {
+        console.log("Name: " + name)
+        if (nameEntered) {
+            // Change name
+            console.log('Changing name');
+        } else {
+            // Play
+            nameEntered = true;
+            console.log('Playing');
+        }
+    }
+
+    $: playButtonText = nameEntered ? 'Change Name' : 'Play';
 </script>
 
 <div class="landing-page bg-white">
@@ -28,13 +42,21 @@
         <h1 class="title-animation">Sentencio</h1>
         <p class="subtext subtext-animation">Fun for the whole friend group :)</p>
     </div>
-    <div class="buttons">
-        <div class="flex">
-            <input type="text" placeholder="Enter Game Code" class="input input-bordered flex-grow" />
-            <button class="btn btn-de-york-500 hover:bg-de-york-600 ml-2" on:click={enterGameCode}>Join Game</button>
+    <div class="main buttons">
+        <div class="nameEntry">
+            <input bind:value={name} type="text" class="input input-bordered" />
+            <button class="btn btn-de-york-500 hover:bg-de-york-600 ml-2" on:click={playClickedHandler}>{playButtonText}</button>
         </div>
-        <button class="btn bg-de-york-500  hover:bg-de-york-600" on:click={hostGame}>Create Lobby</button>
-        <button class="btn bg-de-york-500  hover:bg-de-york-600" on:click={joinGame}>Server Browser</button>
+        {#if nameEntered}
+            <section class="sub buttons">
+                <div class="flex">
+                    <input type="text" placeholder="Enter Game Code" class="input input-bordered flex-grow" />
+                    <button class="btn btn-de-york-500 hover:bg-de-york-600 ml-2" on:click={joinLobbyUsingGameCode}>Join Game</button>
+                </div>
+                <button class="btn bg-de-york-500  hover:bg-de-york-600" on:click={hostGame}>Create Lobby</button>
+                <button class="btn bg-de-york-500  hover:bg-de-york-600" on:click={joinGame}>Server Browser</button>
+            </section>
+        {/if}
     </div>
 </div>
 

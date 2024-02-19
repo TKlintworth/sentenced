@@ -29,7 +29,8 @@ app.get('/', (req, res) => {
 
 io.on('connection', (socket) => {
   // Now the socket represents a connection to a specific client
-  // Initially add their user id to the list of online users
+
+  // INITIAL CONNECTION LOGIC START
   let user = {
     name: "Anonymous",
     lobby: null,
@@ -38,18 +39,23 @@ io.on('connection', (socket) => {
 
   onlineUsers[socket.id] = user;
   io.emit("user-connected", onlineUsers[socket.id]);
+  console.log(`User connected: ${socket.id}`);
+  console.log(onlineUsers);
+
+  // INITIAL CONNECTION LOGIC END
+
+  // SERVER SIDE SOCKET EVENT LISTENERS
 
   socket.on('set-name', (name) => {
     onlineUsers[socket.id].name = name;
     io.emit("user-updated", onlineUsers[socket.id]);
   });
   
-  console.log(`User connected: ${socket.id}`);
-
   socket.on('disconnect', () => {
-    console.log('user disconnected');
+    console.log(`User disconnected: ${socket.id}`);
     io.emit("user-disconnected", onlineUsers[socket.id]);
     delete onlineUsers[socket.id];
+    console.log(onlineUsers);
   });
 
   socket.on('create-lobby', (lobbyData) => {

@@ -9,7 +9,13 @@
     import { socketStore } from '../lib/socketStore.js';
 
     onMount(() => {
-        socketStore.connect();
+        console.log('Mounting layout');
+        socketStore.subscribe((socket) => {
+            console.log('Socket: ', socket);
+            if (!socket){
+                socketStore.connect();
+            }
+        });
     });
 </script>
 

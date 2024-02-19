@@ -1,6 +1,6 @@
 <script>
     import { goto } from '$app/navigation';
-    import { socketStore } from './$lib/stores.js';
+    import { socketStore } from './$lib/socketStore.js';
 
     let passwordBoolean = false;
 

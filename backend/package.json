@@ -1,5 +1,6 @@
 {
   "name": "backend",
+  "type": "module",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -12,6 +13,7 @@
   "dependencies": {
     "@socket.io/admin-ui": "^0.5.1",
     "express": "^4.18.2",
+    "nanoid": "^5.0.5",
     "socket.io": "^4.7.4"
   }
 }

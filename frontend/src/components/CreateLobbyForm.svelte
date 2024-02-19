@@ -1,8 +1,15 @@
 <script>
     import { goto } from '$app/navigation';
-    import { socketStore } from './$lib/socketStore.js';
+    import { socketStore } from '../lib/socketStore.js';
 
     let passwordBoolean = false;
+    let socketSubscription = null;
+    
+    socketStore.subscribe((socket) => {
+      if (socket){
+        socketSubscription = socket;
+      }
+    });
 
     function cancelCreateLobby() {
         console.log('Canceling lobby creation');
@@ -10,11 +17,10 @@
     }
 
     const emitCreateLobby = (lobbyData) => {
-        socketStore.subscribe((socket) => {
-            if (socket) {
-              socket.emit('create-lobby', lobbyData);
-            }
-        });
+      if(socketSubscription){
+        console.log(socketSubscription);
+        socketSubscription.emit('create-lobby', lobbyData);
+      }
     };
 
     function createLobby() {
@@ -24,14 +30,14 @@
         let password = ''
         if (passwordBoolean) {
             password = document.getElementById('grid-password').value;
-        } 
+        }
         //socket.emit('create-lobby'
         emitCreateLobby({
             serverName: document.getElementById('server-name').value,
             password: password,
             players: document.getElementById('grid-state').value,
             hostPlayerName: 'Tristan'
-        }); 
+        });
         
         // Get the lobby id from the server
         goto('/lobby');

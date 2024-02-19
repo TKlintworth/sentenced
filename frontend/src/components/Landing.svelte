@@ -1,5 +1,22 @@
 <script>
     import { goto } from '$app/navigation';
+    import { socketStore } from '../lib/socketStore.js';
+    import { onMount } from 'svelte';
+
+    let socketSubscription = null;
+    socketStore.subscribe((socket) => {
+      if (socket){
+        socketSubscription = socket;
+      }
+    });
+
+    onMount(() => {
+        console.log('Mounting landing page');
+        socketStore.subscribe((socket) => {
+            console.log('Socket: ', socket);
+            socket = socket;
+        });
+    });
 
     function hostGame() {
         // Implementation for hosting a game
@@ -23,18 +40,17 @@
     let name = 'Player';
 
     function playClickedHandler() {
-        console.log("Name: " + name)
-        if (nameEntered) {
-            // Change name
-            console.log('Changing name');
-        } else {
+        console.log("Setting name to: " + name)
+        socketSubscription.emit('set-name', name);
+
+        if (!nameEntered) {
             // Play
             nameEntered = true;
-            console.log('Playing');
+            console.log('First click of play button');
         }
     }
 
-    $: playButtonText = nameEntered ? 'Change Name' : 'Play';
+    $: playButtonText = nameEntered ? 'Set Name' : 'Play';
 </script>
 
 <div class="landing-page bg-white">

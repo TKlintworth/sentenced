@@ -1,21 +1,21 @@
 <script>
     import { goto } from '$app/navigation';
-    import { onMount } from 'svelte';
-    //import io from 'socket.io-client';
-    
-    //let socket = io('http://localhost:3000');
-
-    /* socket.on('connect', () => {
-      console.log('Connected to server in create lobby form');
-    }); */
+    import { socketStore } from './$lib/stores.js';
 
     let passwordBoolean = false;
 
     function cancelCreateLobby() {
         console.log('Canceling lobby creation');
         goto('/');
-        
     }
+
+    const emitCreateLobby = (lobbyData) => {
+        socketStore.subscribe((socket) => {
+            if (socket) {
+              socket.emit('create-lobby', lobbyData);
+            }
+        });
+    };
 
     function createLobby() {
         // Implementation for creating a lobby
@@ -25,14 +25,16 @@
         if (passwordBoolean) {
             password = document.getElementById('grid-password').value;
         } 
-        /* socket.emit('create-lobby', {
+        //socket.emit('create-lobby'
+        emitCreateLobby({
             serverName: document.getElementById('server-name').value,
             password: password,
             players: document.getElementById('grid-state').value,
             hostPlayerName: 'Tristan'
-        }); */
+        }); 
         
-        //goto('/lobby');
+        // Get the lobby id from the server
+        goto('/lobby');
     }
 
     function handlePasswordChecked(event) {

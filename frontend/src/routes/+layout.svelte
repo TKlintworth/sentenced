@@ -4,9 +4,13 @@
     import Footer from "../components/Footer.svelte";
     import Button from "../components/Button.svelte";
     import Landing from "../components/Landing.svelte";
-    import io from 'socket.io-client';
-    let socket = io('http://localhost:3000');
     
+    import { onMount } from 'svelte';
+    import { socketStore } from '../lib/socketStore.js';
+
+    onMount(() => {
+        socketStore.connect();
+    });
 </script>
 
 <!-- <slot /> -->

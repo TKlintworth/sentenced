@@ -5,9 +5,9 @@
     
     //let socket = io('http://localhost:3000');
 
-    socket.on('connect', () => {
+    /* socket.on('connect', () => {
       console.log('Connected to server in create lobby form');
-    });
+    }); */
 
     let passwordBoolean = false;
 
@@ -25,12 +25,12 @@
         if (passwordBoolean) {
             password = document.getElementById('grid-password').value;
         } 
-        socket.emit('create-lobby', {
+        /* socket.emit('create-lobby', {
             serverName: document.getElementById('server-name').value,
             password: password,
             players: document.getElementById('grid-state').value,
             hostPlayerName: 'Tristan'
-        });
+        }); */
         
         //goto('/lobby');
     }

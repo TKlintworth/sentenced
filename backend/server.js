@@ -8,14 +8,13 @@ const httpServer = http.createServer(app);
 
 const io = new Server(httpServer, {
   cors: {
-    origin: ["http://localhost:5173", "https://admin.socket.io", "http://localhost:3000"],
+    origin: ["http://localhost:5173", "https://admin.socket.io/"],
     methods: ["GET", "POST"]
   }
 });
 
 instrument(io, {
   auth: false,
-  mode: 'development',
 });
 //app.get('/', (req, res) => {
 //  res.send('<h1>Sentencio</h1>'); // Placeholder for your Svelte app

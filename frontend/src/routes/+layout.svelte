@@ -4,6 +4,8 @@
     import Footer from "../components/Footer.svelte";
     import Button from "../components/Button.svelte";
     import Landing from "../components/Landing.svelte";
+    import io from 'socket.io-client';
+    let socket = io('http://localhost:3000');
     
 </script>
 

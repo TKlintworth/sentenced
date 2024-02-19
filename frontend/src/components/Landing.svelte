@@ -17,6 +17,8 @@
     function enterGameCode() {
         // Implementation for entering a game code
 
+
+
         //goto('/code');
     }
 </script>
@@ -27,9 +29,12 @@
         <p class="subtext subtext-animation">Fun for the whole friend group :)</p>
     </div>
     <div class="buttons">
+        <div class="flex">
+            <input type="text" placeholder="Enter Game Code" class="input input-bordered flex-grow" />
+            <button class="btn btn-de-york-500 hover:bg-de-york-600 ml-2" on:click={enterGameCode}>Join Game</button>
+        </div>
         <button class="btn bg-de-york-500  hover:bg-de-york-600" on:click={hostGame}>Create Lobby</button>
         <button class="btn bg-de-york-500  hover:bg-de-york-600" on:click={joinGame}>Server Browser</button>
-        <button class="btn bg-de-york-500  hover:bg-de-york-600" on:click={enterGameCode}>Enter Game Code</button>
     </div>
 </div>
 

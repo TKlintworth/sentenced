@@ -1,9 +1,9 @@
 <script>
     import { goto } from '$app/navigation';
     import { onMount } from 'svelte';
-    import io from 'socket.io-client';
+    //import io from 'socket.io-client';
     
-    let socket = io('http://localhost:3000');
+    //let socket = io('http://localhost:3000');
 
     socket.on('connect', () => {
       console.log('Connected to server in create lobby form');

@@ -1,11 +1,22 @@
+const { instrument } = require("@socket.io/admin-ui");
 const express = require('express');
 const http = require('http');
-const socketIo = require('socket.io');
+const { Server } = require("socket.io");
 
 const app = express();
-const server = http.createServer(app);
-const io = socketIo(server);
+const httpServer = http.createServer(app);
 
+const io = new Server(httpServer, {
+  cors: {
+    origin: ["http://localhost:5173", "https://admin.socket.io", "http://localhost:3000"],
+    methods: ["GET", "POST"]
+  }
+});
+
+instrument(io, {
+  auth: false,
+  mode: 'development',
+});
 //app.get('/', (req, res) => {
 //  res.send('<h1>Sentencio</h1>'); // Placeholder for your Svelte app
 //});
@@ -21,8 +32,13 @@ io.on('connection', (socket) => {
     console.log('Server side createLobby');
     console.log(lobbyData);
   });
+
+  socket.on('list-lobbies', () => {
+    console.log('Server side listLobbies');
+  });
 });
 
 
+
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+httpServer.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -50,11 +50,9 @@ io.on('connection', (socket) => {
   io.emit("user-connected", onlineUsers[socket.id]);
   console.log(`User connected: ${socket.id}`);
   console.log(onlineUsers);
-
   // INITIAL CONNECTION LOGIC END
 
   // SERVER SIDE SOCKET EVENT LISTENERS
-
   socket.on('set-name', (name) => {
     onlineUsers[socket.id].name = name;
     console.log("Server side setName: ", onlineUsers[socket.id].name);
@@ -69,16 +67,13 @@ io.on('connection', (socket) => {
   });
 
   socket.on('create-lobby', (lobbyData) => {
-    console.log('Server side createLobby');
-    console.log(lobbyData);
-    // Generate a unique ID for the lobby
-    lobbyData.lobbyId = nanoid();
-    lobbies[lobbyData.lobbyId] = lobbyData;
-    console.log(`Lobbies: ${lobbies}`);
+    handleLobbyCreation(lobbyData);
   });
 
   socket.on('list-lobbies', () => {
     console.log('Server side listLobbies');
+    console.log(lobbies);
+    io.emit('list-lobbies', lobbies);
   });
 
   socket.on('join-lobby', (lobbyData, cb) => {
@@ -91,9 +86,19 @@ io.on('connection', (socket) => {
 
 });
 
-
-
-
+function handleLobbyCreation(lobbyData) {
+  let lobbyId = nanoid(11);
+  lobbies[lobbyId] = {
+    id: lobbyId,
+    name: lobbyData.name,
+    host: lobbyData.host,
+    createdAt: new Date(),
+    users: [lobbyData.host],
+    messages: [],
+  };
+  console.log(lobbies);
+  io.emit('lobby-created', lobbies[lobbyId]);
+}
 
 
 const PORT = process.env.PORT || 3000;

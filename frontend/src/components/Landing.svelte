@@ -21,7 +21,7 @@
     function hostGame() {
         // Implementation for hosting a game
         
-        goto('/host');
+        goto('/servers/create');
     }
 
     function joinGame() {

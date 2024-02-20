@@ -19,6 +19,41 @@ let users = [];
 
 let onlineUsers = {};
 let lobbies = {};
+//Create some fake lobby data to test with
+lobbies['abc123'] = {
+  id: 'abc123',
+  serverName: 'Test Lobby',
+  hostPlayerName: 'Test Host',
+  createdAt: new Date(),
+  userCount: 4,
+  maxUsers: 10,
+  status: 'finished',
+  messages: [],
+};
+
+lobbies['def456'] = {
+  id: 'def456',
+  serverName: 'Another Test Lobby',
+  hostPlayerName: 'Another Test Host',
+  createdAt: new Date(),
+  userCount: 2,
+  maxUsers: 2,
+  status: 'playing',
+  messages: [],
+};
+
+lobbies['ghi789'] = {
+  id: 'ghi789',
+  serverName: 'Yet Another Test Lobby',
+  hostPlayerName: 'Yet Another Test Host',
+  createdAt: new Date(),
+  userCount: 1,
+  maxUsers: 4,
+  status: 'waiting for players',
+  messages: [],
+};
+
+
 
 const io = new Server(httpServer, {
   cors: {
@@ -94,17 +129,20 @@ io.on('connection', (socket) => {
 
 });
 
+// status's could be: waiting for players, playing, finished
 function handleLobbyCreation(lobbyData) {
   let lobbyId = nanoid(11);
   lobbies[lobbyId] = {
     id: lobbyId,
-    name: lobbyData.name,
-    host: lobbyData.host,
+    serverName: lobbyData.name,
+    hostPlayerName: lobbyData.host,
     createdAt: new Date(),
-    users: [lobbyData.host],
+    //users: [lobbyData.host],
+    userCount: 1,
+    maxUsers: lobbyData.maxUsers,
+    status: 'waiting',
     messages: [],
   };
-  console.log(lobbies);
   io.emit('lobby-created', lobbies[lobbyId]);
 }
 

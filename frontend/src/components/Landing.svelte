@@ -18,16 +18,16 @@
         });
     });
 
-    function hostGame() {
+    function createLobbyClicked() {
         // Implementation for hosting a game
         
         goto('/servers/create');
     }
 
-    function joinGame() {
+    function serverBrowserClicked() {
         // Implementation for joining a game
 
-        goto('/join');
+        goto('/servers');
     }
     
     function joinLobbyUsingGameCode() {
@@ -69,8 +69,8 @@
                     <input type="text" placeholder="Enter Game Code" class="input input-bordered flex-grow" />
                     <button class="btn btn-de-york-500 hover:bg-de-york-600 ml-2" on:click={joinLobbyUsingGameCode}>Join Game</button>
                 </div>
-                <button class="btn bg-de-york-500  hover:bg-de-york-600" on:click={hostGame}>Create Lobby</button>
-                <button class="btn bg-de-york-500  hover:bg-de-york-600" on:click={joinGame}>Server Browser</button>
+                <button class="btn bg-de-york-500  hover:bg-de-york-600" on:click={createLobbyClicked}>Create Lobby</button>
+                <button class="btn bg-de-york-500  hover:bg-de-york-600" on:click={serverBrowserClicked}>Server Browser</button>
             </section>
         {/if}
     </div>

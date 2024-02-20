@@ -48,6 +48,8 @@ io.on('connection', (socket) => {
 
   onlineUsers[socket.id] = user;
   io.emit("user-connected", onlineUsers[socket.id]);
+  io.emit("global-player-count", Object.keys(onlineUsers).length);
+  console.log(Object.keys(onlineUsers).length);
   console.log(`User connected: ${socket.id}`);
   console.log(onlineUsers);
   // INITIAL CONNECTION LOGIC END
@@ -63,11 +65,17 @@ io.on('connection', (socket) => {
     console.log(`User disconnected: ${socket.id}`);
     io.emit("user-disconnected", onlineUsers[socket.id]);
     delete onlineUsers[socket.id];
-    console.log(onlineUsers);
+    io.emit("global-player-count", Object.keys(onlineUsers).length);
   });
 
   socket.on('create-lobby', (lobbyData) => {
     handleLobbyCreation(lobbyData);
+  });
+
+  socket.on('global-player-count', (cb) => {
+    console.log('Server side globalPlayerCount');
+    console.log(cb);
+    cb(Object.keys(onlineUsers).length);
   });
 
   socket.on('list-lobbies', () => {

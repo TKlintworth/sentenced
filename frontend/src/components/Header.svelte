@@ -1,4 +1,26 @@
 <script>
+    import { socketStore } from '../lib/socketStore.js';
+    import { onMount } from 'svelte';
+
+    
+    let onlinePlayers = 0;
+    let subscribedSocket = null;
+    
+    onMount(() => {
+        socketStore.subscribe((socket) => {
+            if (socket){
+                subscribedSocket = socket;
+                subscribedSocket.on('global-player-count', (data) => {
+                    onlinePlayers = data;
+                    console.log('Online Players:', data);
+                });
+            }
+        });
+    });
+
+    // Dynamically update the online player count if subscribedSocket exists
+    
+    
 
 </script>
 
@@ -9,6 +31,9 @@
             <img src="/favicon_io/favicon-32x32.png" alt="Game Icon" class="game-icon" />
         </a>
         <span>Sentencio</span>
+    </div>
+    <div class="player-amount-section">
+        <span>Online Players: {onlinePlayers}</span>
     </div>
     <div class="user-section">
         <button class="icon-button">

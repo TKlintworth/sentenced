@@ -38,6 +38,13 @@
     let nameEntered = false;
     let playButtonText = 'Play';
     let name = 'Player';
+    let nameText = 'your';
+    
+    $: if (nameEntered && name != '') {
+        nameText = name + "'s";
+    } else {
+        nameText = 'your';
+    }
 
     function playClickedHandler() {
         console.log("Setting name to: " + name)
@@ -56,7 +63,7 @@
 <div class="landing-page bg-white">
     <div>
         <h1 class="title-animation">Sentencio</h1>
-        <p class="subtext subtext-animation">Fun for the whole friend group :)</p>
+        <p class="subtext subtext-animation">Fun for {nameText} whole friend group :)</p>
     </div>
     <div class="main buttons">
         <div class="nameEntry">

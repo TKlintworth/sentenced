@@ -11,11 +11,7 @@
       }
     });
 
-    function cancelCreateLobby() {
-        console.log('Canceling lobby creation');
-        goto('/');
-    }
-
+    
     const emitCreateLobby = (lobbyData) => {
       if(socketSubscription){
         console.log(socketSubscription);
@@ -23,9 +19,10 @@
       }
     };
 
-    function createLobby() {
+    function createLobby(event) {
         // Implementation for creating a lobby
         // Need to validate our data and send a socket io client event to the server
+        event.preventDefault();
         console.log('Client side creating lobby');
         let password = ''
         if (passwordBoolean) {
@@ -35,7 +32,7 @@
         emitCreateLobby({
             serverName: document.getElementById('server-name').value,
             password: password,
-            players: document.getElementById('grid-state').value,
+            maxUsers: document.getElementById('grid-state').value,
             hostPlayerName: 'Tristan'
         });
         
@@ -46,6 +43,12 @@
     function handlePasswordChecked(event) {
         passwordBoolean = event.target.checked;
         console.log('Password checked: ', passwordBoolean);
+    }
+
+    function cancelCreateLobby(event) {
+        event.preventDefault();
+        console.log('Canceling lobby creation');
+        goto('/');
     }
 
 </script>

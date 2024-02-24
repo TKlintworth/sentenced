@@ -8,6 +8,11 @@
     socketStore.subscribe((socket) => {
       if (socket){
         socketSubscription = socket;
+
+        socket.on('lobby-created', (lobbyData) => {
+          console.log('Lobby created: ', lobbyData);
+          goto('/servers/' + lobbyData);
+        });
       }
     });
 
@@ -20,7 +25,6 @@
     };
 
     function createLobby(event) {
-        // Implementation for creating a lobby
         // Need to validate our data and send a socket io client event to the server
         event.preventDefault();
         console.log('Client side creating lobby');
@@ -28,16 +32,12 @@
         if (passwordBoolean) {
             password = document.getElementById('grid-password').value;
         }
-        //socket.emit('create-lobby'
         emitCreateLobby({
             serverName: document.getElementById('server-name').value,
             password: password,
             maxUsers: document.getElementById('grid-state').value,
             hostPlayerName: 'Tristan'
         });
-        
-        // Get the lobby id from the server
-        goto('/lobby');
     }
 
     function handlePasswordChecked(event) {

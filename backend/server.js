@@ -19,6 +19,7 @@ let users = [];
 let onlineUsers = {};
 let lobbies = {};
 //Create some fake lobby data to test with
+/*
 lobbies['abc123'] = {
   id: 'abc123',
   serverName: 'Join my game!',
@@ -53,7 +54,7 @@ lobbies['ghi789'] = {
   status: 'waiting for players',
   messages: [],
 };
-
+*/
 
 
 const io = new Server(httpServer, {
@@ -145,8 +146,15 @@ function handleLobbyCreation(lobbyData) {
     status: 'waiting',
     messages: [],
   };
-  io.emit('lobby-created'); //lobbies[lobbyId]);
+  io.emit('lobby-created', lobbyId); //lobbies[lobbyId]);
 }
+
+function handleLobbyDeletion(lobbyId) {
+  delete lobbies[lobbyId];
+  io.emit('lobby-deleted', lobbyId);
+}
+
+// Add Game Logic Here
 
 
 const PORT = process.env.PORT || 3000;

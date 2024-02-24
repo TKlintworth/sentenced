@@ -37,24 +37,25 @@
 
     let nameEntered = false;
     let playButtonText = 'Play';
-    let name = 'Player';
+    let name;
+    let defaultName = 'Player';
     let nameText = 'your';
+
+    $: if (name) {
+        nameEntered = true;
+    } else {
+        nameEntered = false;
+    }
     
     $: if (nameEntered && name != '') {
         nameText = name + "'s";
+        socketSubscription.emit('set-name', name);
     } else {
         nameText = 'your';
     }
 
     function playClickedHandler() {
-        console.log("Setting name to: " + name)
-        socketSubscription.emit('set-name', name);
-
-        if (!nameEntered) {
-            // Play
-            nameEntered = true;
-            console.log('First click of play button');
-        }
+        
     }
 
     $: playButtonText = nameEntered ? 'Set Name' : 'Play';
@@ -67,7 +68,7 @@
     </div>
     <div class="main buttons">
         <div class="nameEntry">
-            <input bind:value={name} type="text" class="input input-bordered" />
+            <input bind:value={name} type="text" placeholder={defaultName} class="input input-bordered" />
             <button class="btn btn-de-york-500 hover:bg-de-york-600 ml-2" on:click={playClickedHandler}>{playButtonText}</button>
         </div>
         {#if nameEntered}

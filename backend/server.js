@@ -14,7 +14,6 @@ import { nanoid } from 'nanoid';
 
 const app = express();
 const httpServer = http.createServer(app);
-
 let users = [];
 
 let onlineUsers = {};
@@ -22,8 +21,9 @@ let lobbies = {};
 //Create some fake lobby data to test with
 lobbies['abc123'] = {
   id: 'abc123',
-  serverName: 'Test Lobby',
+  serverName: 'Join my game!',
   hostPlayerName: 'Test Host',
+  password: 'password',
   createdAt: new Date(),
   userCount: 4,
   maxUsers: 10,
@@ -33,8 +33,9 @@ lobbies['abc123'] = {
 
 lobbies['def456'] = {
   id: 'def456',
-  serverName: 'Another Test Lobby',
+  serverName: 'bubbys room',
   hostPlayerName: 'Another Test Host',
+  password: '',
   createdAt: new Date(),
   userCount: 2,
   maxUsers: 2,
@@ -44,7 +45,7 @@ lobbies['def456'] = {
 
 lobbies['ghi789'] = {
   id: 'ghi789',
-  serverName: 'Yet Another Test Lobby',
+  serverName: 'pleasure place to please people',
   hostPlayerName: 'Yet Another Test Host',
   createdAt: new Date(),
   userCount: 1,
@@ -134,8 +135,9 @@ function handleLobbyCreation(lobbyData) {
   let lobbyId = nanoid(11);
   lobbies[lobbyId] = {
     id: lobbyId,
-    serverName: lobbyData.name,
-    hostPlayerName: lobbyData.host,
+    serverName: lobbyData.serverName,
+    password: lobbyData.password,
+    hostPlayerName: lobbyData.hostPlayerName,
     createdAt: new Date(),
     //users: [lobbyData.host],
     userCount: 1,
@@ -143,7 +145,7 @@ function handleLobbyCreation(lobbyData) {
     status: 'waiting',
     messages: [],
   };
-  io.emit('lobby-created', lobbies[lobbyId]);
+  io.emit('lobby-created'); //lobbies[lobbyId]);
 }
 
 

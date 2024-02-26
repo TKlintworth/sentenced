@@ -7,17 +7,7 @@
 
     function requestToJoinLobby() {
         console.log('Requesting to join lobby: ', lobbyId);
-        socketStore.subscribe((socket) => {
-            if (socket){
-                // Try to join the lobby
-                // socket.emit('join-lobby', lobbyId);
-                requestObject = {
-                    lobbyId: lobbyId,
-                    
-                }
-                socket.emit('request-join-lobby', );
-            }
-        });
+        $socketStore.emit('join-lobby', lobbyId);
     }
 
 </script>

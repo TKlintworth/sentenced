@@ -11,6 +11,11 @@
             if (socket){
                 // Try to join the lobby
                 // socket.emit('join-lobby', lobbyId);
+                requestObject = {
+                    lobbyId: lobbyId,
+                    
+                }
+                socket.emit('request-join-lobby', );
             }
         });
     }

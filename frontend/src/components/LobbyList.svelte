@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
     import { socketStore } from '../lib/socketStore.js';
-    import Lobby from './Lobby.svelte';
+    import LobbyCard from './LobbyCard.svelte';
     
     let lobbies = [];
 
@@ -45,7 +45,7 @@
 <div>
     <div class="lobby-list">
         {#each Object.entries(lobbies) as [lobbyId, lobby]}
-            <Lobby lobbyId={lobbyId} lobbyData={lobby} />
+            <LobbyCard lobbyId={lobbyId} lobbyData={lobby} />
         {/each}
     </div>
     <div class="lobby-list-buttons">

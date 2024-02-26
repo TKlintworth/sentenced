@@ -1,22 +1,23 @@
 <script>
     import { goto } from '$app/navigation';
     import { socketStore } from '../lib/socketStore.js';
+    import { username } from '../lib/anonymousUserSessionStore.js';
     import { onMount } from 'svelte';
 
-    let socketSubscription = null;
-    socketStore.subscribe((socket) => {
-      if (socket){
-        socketSubscription = socket;
-      }
-    });
+    //let socketSubscription = null;
+    //socketStore.subscribe((socket) => {
+    //  if (socket){
+    //    socketSubscription = socket;
+    //  }
+    //});
 
-    onMount(() => {
-        console.log('Mounting landing page');
-        socketStore.subscribe((socket) => {
-            console.log('Socket: ', socket);
-            socket = socket;
-        });
-    });
+    //onMount(() => {
+    //    console.log('Mounting landing page');
+    //    socketStore.subscribe((socket) => {
+    //        console.log('Socket: ', socket);
+    //        socket = socket;
+    //    });
+    //});
 
     function createLobbyClicked() {
         // Implementation for hosting a game
@@ -46,16 +47,18 @@
     } else {
         nameEntered = false;
     }
-    
+
     $: if (nameEntered && name != '') {
-        nameText = name + "'s";
-        socketSubscription.emit('set-name', name);
+        username.set(name);
+        sessionStorage.setItem('sentencio-username', name);
+        $socketStore.emit('set-name', name);
+        nameText = $username + "'s";
     } else {
         nameText = 'your';
     }
 
     function playClickedHandler() {
-        
+        $socketStore.emit('set-name', name);
     }
 
     $: playButtonText = nameEntered ? 'Set Name' : 'Play';

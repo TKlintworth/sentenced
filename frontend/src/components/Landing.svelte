@@ -4,20 +4,15 @@
     import { username } from '../lib/anonymousUserSessionStore.js';
     import { onMount } from 'svelte';
 
-    //let socketSubscription = null;
-    //socketStore.subscribe((socket) => {
-    //  if (socket){
-    //    socketSubscription = socket;
-    //  }
-    //});
-
-    //onMount(() => {
-    //    console.log('Mounting landing page');
-    //    socketStore.subscribe((socket) => {
-    //        console.log('Socket: ', socket);
-    //        socket = socket;
-    //    });
-    //});
+    onMount(() => {
+        console.log('Landing page mounted');
+        let storedUsername = sessionStorage.getItem('sentencio-username');
+        if (storedUsername) {
+            console.log('Found stored username and setting: ', storedUsername);
+            name = storedUsername;
+            nameEntered = true;
+        }
+    });
 
     function createLobbyClicked() {
         // Implementation for hosting a game

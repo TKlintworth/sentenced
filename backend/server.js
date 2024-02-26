@@ -99,6 +99,10 @@ io.on('connection', (socket) => {
   });
   
   socket.on('disconnect', () => {
+    // If the user was in a lobby, remove them from the lobby
+    if (onlineUsers[socket.id].lobby) {
+      handleLobbyLeaveAttempt(onlineUsers[socket.id].lobby, socket);
+    }
     console.log(`User disconnected: ${socket.id}`);
     io.emit("user-disconnected", onlineUsers[socket.id]);
     delete onlineUsers[socket.id];
@@ -121,12 +125,17 @@ io.on('connection', (socket) => {
     io.emit('list-lobbies', lobbies);
   });
 
-  socket.on('join-lobby', (lobbyData, cb) => {
-    console.log('Server side joinLobby');
-    console.log(lobbyData);
-    console.log(cb);
-    socket.join(lobbyData.lobbyId);
-    //cb(messages[lobbyData.lobbyId]);
+  socket.on('join-lobby', (lobbyId) => {
+    handleJoinLobbyAttempt(lobbyId, socket)
+  });
+
+  socket.on('leave-lobby', (lobbyId) => {
+    handleLobbyLeaveAttempt(lobbyId, socket);
+  });
+
+  socket.on('global-players-request', (cb) => {
+    console.log('Server side globalPlayersRequest');
+    cb(onlineUsers);
   });
 
 });
@@ -149,9 +158,45 @@ function handleLobbyCreation(lobbyData) {
   io.emit('lobby-created', lobbyId); //lobbies[lobbyId]);
 }
 
-function handleLobbyDeletion(lobbyId) {
+// If the host of a lobby disconnects, randomly assign a new host
+function handleHostDisconnect(lobbyId) {
+  //let newHost = lobbies[lobbyId].users[Math.floor(Math.random() * lobbies[lobbyId].users.length)];
+  //lobbies[lobbyId].host = newHost;
+  io.emit('host-disconnected', ""); //newHost);
+}
+
+function handleJoinLobbyAttempt(lobbyId, socket) {
+  console.log('Server side handleJoinLobbyAttempt');
+  if (boolCheckUserCanJoinLobby(lobbyId, onlineUsers[socket.id])) {
+    socket.join(lobbyId);
+    lobbies[lobbyId].userCount++;
+    console.log(`User ${socket.id} joined lobby ${lobbyId}`);
+    onlineUsers[socket.id].lobby = lobbyId;
+    io.emit('user-updated', onlineUsers[socket.id]);
+    socket.to(lobbyId).emit('user-joined-lobby', onlineUsers[socket.id]);
+  }
+}
+
+function handleLobbyLeaveAttempt(lobbyId, socket) {
+  console.log('Server side handleLobbyLeaveAttempt');
+  socket.leave(lobbyId);
+  console.log(`User ${socket.id} left lobby ${lobbyId}`);
+  onlineUsers[socket.id].lobby = null;
+  lobbies[lobbyId].userCount--;
+  io.emit('user-updated', onlineUsers[socket.id]);
+  socket.to(lobbyId).emit('user-left-lobby', onlineUsers[socket.id]);
+}
+
+// If there are no users in a lobby, delete it
+function handleEmptyLobby(lobbyId) {
   delete lobbies[lobbyId];
   io.emit('lobby-deleted', lobbyId);
+}
+
+function boolCheckUserCanJoinLobby(lobbyId, user) {
+  // If the lobby is full, reject the user, and if the lobby is password protected, check the password
+  console.log('Server side handleLobbyJoinAttempt');
+  return true;
 }
 
 // Add Game Logic Here

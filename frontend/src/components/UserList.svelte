@@ -3,7 +3,8 @@
     import { socketStore } from '../lib/socketStore.js';
     import UserCard from './UserCard.svelte';
 
-    let users = [];
+    export let users;
+    //let users = [];
 
     onMount(() => {
         console.log('Mounting user list');

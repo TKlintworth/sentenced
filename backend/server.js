@@ -138,6 +138,17 @@ io.on('connection', (socket) => {
     cb(onlineUsers);
   });
 
+  socket.on('lobby-players-request', (lobbyId, cb) => {
+    console.log('Server side lobbyPlayersRequest');
+    let lobbyPlayers = [];
+    for (let user in onlineUsers) {
+      if (onlineUsers[user].lobby === lobbyId) {
+        lobbyPlayers.push(onlineUsers[user]);
+      }
+    }
+    cb(lobbyPlayers);
+  });
+
 });
 
 // status's could be: waiting for players, playing, finished

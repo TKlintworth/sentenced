@@ -1,22 +1,27 @@
 <script>
     // Get the values from +page.js
     import { goto } from '$app/navigation';
+    import { socketStore } from '$lib/socketStore.js';
     import UserList from "../../../components/UserList.svelte";
 
     export let data;
+    let users = [];
 
     $: console.log(data);
 
     // Get the users in this server
-    let users = [];
+    $socketStore.emit('lobby-players-request', data.props.serverId, retrievedUsersCallback);
 
-    // Get the server ID
-    let serverId = ''
+    function retrievedUsersCallback(data) {
+        console.log('Retrieved users: ', data);
+        users = data;
+    }
 
     // Get the server ID from the URL
     //$: serverId = $page.params.serverId;
 </script>
 <div>
+    <UserList serverId={data.props.serverId} users={users}></UserList>
     <h1>Server ID: {data.props.serverId}</h1>
-    <UserList serverId={data.props.serverId}></UserList>
+
 </div>

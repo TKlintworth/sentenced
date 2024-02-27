@@ -16,7 +16,11 @@
       }
     });
 
-    
+    $socketStore.on('lobby-created', (lobbyId) => {
+      console.log('Lobby created: ', lobbyId);
+      goto('/servers/' + lobbyId);
+    });
+
     const emitCreateLobby = (lobbyData) => {
       if(socketSubscription){
         console.log(socketSubscription);
@@ -36,7 +40,7 @@
             serverName: document.getElementById('server-name').value,
             password: password,
             maxUsers: document.getElementById('grid-state').value,
-            hostPlayerName: 'Tristan'
+            hostPlayerName: sessionStorage.getItem('sentencio-username')
         });
     }
 

@@ -3,7 +3,7 @@
     import { socketStore } from '../lib/socketStore.js';
     import UserCard from './UserCard.svelte';
 
-    export let users;
+    export let users = [];
     //let users = [];
 
     onMount(() => {
@@ -35,9 +35,13 @@
 <div class="container mx-auto px-4">
     <h1>User List</h1>
     <ul>
-        {#each users as user}
-            <UserCard username={user.username} />
-        {/each}
+        {#if users.length === 0}
+            <p>No users</p>
+        {:else}
+            {#each users as user}
+                <UserCard username={user.username} />
+            {/each}
+        {/if}
     </ul>
 </div>
 

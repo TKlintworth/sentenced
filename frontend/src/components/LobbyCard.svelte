@@ -1,5 +1,6 @@
 <script>
     import { onMount } from 'svelte';
+    import { goto } from '$app/navigation';
     import { socketStore } from '../lib/socketStore.js';
 
     export let lobbyId;
@@ -9,6 +10,11 @@
         console.log('Requesting to join lobby: ', lobbyId);
         $socketStore.emit('join-lobby', lobbyId);
     }
+
+    $socketStore.on('lobby-joined', (lobbyId) => {
+        console.log('Lobby joined: ', lobbyId);
+        goto('/servers/' + lobbyId);
+    });
 
 </script>
 

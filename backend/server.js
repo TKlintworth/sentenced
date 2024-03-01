@@ -178,6 +178,7 @@ function handleHostDisconnect(lobbyId) {
 
 function handleJoinLobbyAttempt(lobbyId, socket) {
   console.log('Server side handleJoinLobbyAttempt');
+  let lobbyJoinFailReason = '';
   if (boolCheckUserCanJoinLobby(lobbyId, onlineUsers[socket.id])) {
     socket.join(lobbyId);
     lobbies[lobbyId].userCount++;
@@ -185,6 +186,12 @@ function handleJoinLobbyAttempt(lobbyId, socket) {
     onlineUsers[socket.id].lobby = lobbyId;
     io.emit('user-updated', onlineUsers[socket.id]);
     socket.to(lobbyId).emit('user-joined-lobby', onlineUsers[socket.id]);
+    // Send a message to the user that they have successfully joined the lobby
+    socket.emit('lobby-joined', lobbyId);
+  } else {
+    // Send a message to the user that they were unable to join the lobby
+    socket.emit('lobby-join-failed', { lobbyId: lobbyId, reason: lobbyJoinFailReason });
+  
   }
 }
 
@@ -207,6 +214,10 @@ function handleEmptyLobby(lobbyId) {
 function boolCheckUserCanJoinLobby(lobbyId, user) {
   // If the lobby is full, reject the user, and if the lobby is password protected, check the password
   console.log('Server side handleLobbyJoinAttempt');
+  if (lobbies[lobbyId].userCount >= lobbies[lobbyId].maxUsers) {
+    console.log('Lobby is full');
+    return false;
+  }
   return true;
 }
 

@@ -4,20 +4,14 @@
 
     let passwordBoolean = false;
     let socketSubscription = null;
-    
-    socketStore.subscribe((socket) => {
-      if (socket){
-        socketSubscription = socket;
-
-        socket.on('lobby-created', (lobbyData) => {
-          console.log('Lobby created: ', lobbyData);
-          goto('/servers/' + lobbyData);
-        });
-      }
-    });
 
     $socketStore.on('lobby-created', (lobbyId) => {
       console.log('Lobby created: ', lobbyId);
+      $socketStore.emit('join-lobby', lobbyId);
+    });
+
+    $socketStore.on('lobby-joined', (lobbyId) => {
+      console.log('Lobby joined: ', lobbyId);
       goto('/servers/' + lobbyId);
     });
 

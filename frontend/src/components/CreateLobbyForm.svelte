@@ -1,9 +1,18 @@
 <script>
     import { goto } from '$app/navigation';
+    import { onMount } from 'svelte';
     import { socketStore } from '../lib/socketStore.js';
 
     let passwordBoolean = false;
     let socketSubscription = null;
+
+    onMount(() => {
+      socketStore.subscribe((socket) => {
+        if(socket){
+          socketSubscription = socket;
+        }
+      });
+    });
 
     $socketStore.on('lobby-created', (lobbyId) => {
       console.log('Lobby created: ', lobbyId);
@@ -16,6 +25,8 @@
     });
 
     const emitCreateLobby = (lobbyData) => {
+      console.log('Emitting create lobby: ', lobbyData);
+      console.log(socketSubscription);
       if(socketSubscription){
         console.log(socketSubscription);
         socketSubscription.emit('create-lobby', lobbyData);

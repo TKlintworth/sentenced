@@ -5,6 +5,7 @@
 
     let passwordBoolean = false;
     let socketSubscription = null;
+    let password = '';
 
     onMount(() => {
       socketStore.subscribe((socket) => {
@@ -16,7 +17,7 @@
 
     $socketStore.on('lobby-created', (lobbyId) => {
       console.log('Lobby created: ', lobbyId);
-      $socketStore.emit('join-lobby', lobbyId);
+      $socketStore.emit('join-lobby', lobbyId, password);
     });
 
     $socketStore.on('lobby-joined', (lobbyId) => {
@@ -37,7 +38,6 @@
         // Need to validate our data and send a socket io client event to the server
         event.preventDefault();
         console.log('Client side creating lobby');
-        let password = ''
         if (passwordBoolean) {
             password = document.getElementById('grid-password').value;
         }

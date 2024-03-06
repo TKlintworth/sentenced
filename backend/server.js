@@ -125,11 +125,12 @@ io.on('connection', (socket) => {
     io.emit('list-lobbies', lobbies);
   });
 
-  socket.on('join-lobby', (lobbyId) => {
-    handleJoinLobbyAttempt(lobbyId, socket)
+  socket.on('join-lobby', (lobbyId, password) => {
+    handleJoinLobbyAttempt(lobbyId, socket, password);
   });
 
   socket.on('leave-lobby', (lobbyId) => {
+    console.log('Received leave-lobby event with lobbyId:', lobbyId);
     handleLobbyLeaveAttempt(lobbyId, socket);
   });
 
@@ -147,6 +148,16 @@ io.on('connection', (socket) => {
       }
     }
     cb(lobbyPlayers);
+  });
+
+  socket.on('check-lobby-password', (lobbyId, callback) => {
+    console.log('Server side checkLobbyPassword');
+    const lobby = lobbies[lobbyId];
+    if (lobby && lobby.password) {
+      callback(true);
+    } else {
+      callback(false);
+    }
   });
 
 });
@@ -176,49 +187,70 @@ function handleHostDisconnect(lobbyId) {
   io.emit('host-disconnected', ""); //newHost);
 }
 
-function handleJoinLobbyAttempt(lobbyId, socket) {
+function handleJoinLobbyAttempt(lobbyId, socket, password) {
   console.log('Server side handleJoinLobbyAttempt');
   let lobbyJoinFailReason = '';
-  if (boolCheckUserCanJoinLobby(lobbyId, onlineUsers[socket.id])) {
-    socket.join(lobbyId);
-    lobbies[lobbyId].userCount++;
-    console.log(`User ${socket.id} joined lobby ${lobbyId}`);
-    onlineUsers[socket.id].lobby = lobbyId;
-    io.emit('user-updated', onlineUsers[socket.id]);
-    socket.to(lobbyId).emit('user-joined-lobby', onlineUsers[socket.id]);
-    // Send a message to the user that they have successfully joined the lobby
-    socket.emit('lobby-joined', lobbyId);
+
+  const lobby = lobbies[lobbyId];
+  if (lobby) {
+    if (lobby.password && lobby.password !== password) {
+      lobbyJoinFailReason = 'Incorrect password';
+    } else {
+      if (lobby.userCount >= lobby.maxUsers) {
+        lobbyJoinFailReason = 'Lobby is full';
+      } else {
+        if (onlineUsers[socket.id].lobby === lobbyId) {
+          lobbyJoinFailReason = 'You are already in this lobby';
+        } else {
+          socket.join(lobbyId);
+          lobbies[lobbyId].userCount++;
+          console.log(`User ${socket.id} joined lobby ${lobbyId}`);
+          onlineUsers[socket.id].lobby = lobbyId;
+          onlineUsers[socket.id].lobbyName = lobbies[lobbyId].serverName;
+          io.emit('user-updated', onlineUsers[socket.id]);
+          socket.to(lobbyId).emit('user-joined-lobby', onlineUsers[socket.id]);
+          // Send a message to the user that they have successfully joined the lobby
+          socket.emit('lobby-joined', lobbyId);
+          return;
+        }
+      }
+    }
   } else {
-    // Send a message to the user that they were unable to join the lobby
-    socket.emit('lobby-join-failed', { lobbyId: lobbyId, reason: lobbyJoinFailReason });
-  
+    lobbyJoinFailReason = 'Lobby not found';
   }
+
+  socket.emit('lobby-join-failed', { lobbyId: lobbyId, reason: lobbyJoinFailReason });
 }
 
 function handleLobbyLeaveAttempt(lobbyId, socket) {
   console.log('Server side handleLobbyLeaveAttempt');
-  socket.leave(lobbyId);
-  console.log(`User ${socket.id} left lobby ${lobbyId}`);
-  onlineUsers[socket.id].lobby = null;
-  lobbies[lobbyId].userCount--;
-  io.emit('user-updated', onlineUsers[socket.id]);
-  socket.to(lobbyId).emit('user-left-lobby', onlineUsers[socket.id]);
+  console.log('Lobby ID:', lobbyId);
+  console.log('User ID:', socket.id);
+  console.log('Lobbies:', lobbies);
+  
+  if (lobbies[lobbyId]) {
+    socket.leave(lobbyId);
+    console.log(`User ${socket.id} left lobby ${lobbyId}`);
+    onlineUsers[socket.id].lobby = null;
+    onlineUsers[socket.id].lobbyName = null;
+    lobbies[lobbyId].userCount--;
+    io.emit('user-updated', onlineUsers[socket.id]);
+    socket.to(lobbyId).emit('user-left-lobby', onlineUsers[socket.id]);
+
+    if (lobbies[lobbyId].userCount === 0) {
+      delete lobbies[lobbyId];
+      io.emit('lobby-deleted', lobbyId);
+      console.log(`Lobby ${lobbyId} deleted`);
+    }
+  } else {
+    console.log(`Lobby ${lobbyId} not found`);
+  }
 }
 
 // If there are no users in a lobby, delete it
 function handleEmptyLobby(lobbyId) {
   delete lobbies[lobbyId];
   io.emit('lobby-deleted', lobbyId);
-}
-
-function boolCheckUserCanJoinLobby(lobbyId, user) {
-  // If the lobby is full, reject the user, and if the lobby is password protected, check the password
-  console.log('Server side handleLobbyJoinAttempt');
-  if (lobbies[lobbyId].userCount >= lobbies[lobbyId].maxUsers) {
-    console.log('Lobby is full');
-    return false;
-  }
-  return true;
 }
 
 // Add Game Logic Here

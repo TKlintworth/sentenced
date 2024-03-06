@@ -2,13 +2,33 @@
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
     import { socketStore } from '../lib/socketStore.js';
+    import PasswordModal from './PasswordModal.svelte';
 
     export let lobbyId;
     export let lobbyData;
 
-    function requestToJoinLobby() {
+    let showPasswordModal = false;
+    let selectedLobbyId = null;
+
+    function requestToJoinLobby(lobbyId) {
         console.log('Requesting to join lobby: ', lobbyId);
-        $socketStore.emit('join-lobby', lobbyId);
+        selectedLobbyId = lobbyId;
+        $socketStore.emit('check-lobby-password', lobbyId, (requiresPassword) => {
+            if (requiresPassword) {
+                showPasswordModal = true;
+            } else {
+                $socketStore.emit('join-lobby', lobbyId);
+            }
+        });
+    }
+
+    function handlePasswordSubmit(event) {
+        const { password } = event.detail;
+        $socketStore.emit('join-lobby', selectedLobbyId, password);
+    }
+
+    function handlePasswordCancel() {
+        selectedLobbyId = null;
     }
 
     $socketStore.on('lobby-joined', (lobbyId) => {
@@ -32,9 +52,10 @@
         <p>Players: {lobbyData.userCount}/{lobbyData.maxUsers}</p>
         <p>Status: {lobbyData.status}</p>
         <div class="card-actions justify-end">
-            <button class="btn bg-de-york-600" on:click={requestToJoinLobby}>Join Lobby</button>
+            <button class="btn bg-de-york-600" on:click={() => requestToJoinLobby(lobbyData.id)}>Join Lobby</button>
         </div>
     </div>
+    <PasswordModal bind:showModal={showPasswordModal} on:submit={handlePasswordSubmit} on:cancel={handlePasswordCancel} />
 </div>
 
 <style>

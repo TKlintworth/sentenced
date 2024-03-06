@@ -1,4 +1,63 @@
 <script>
+    import { onMount, onDestroy } from 'svelte';
+    import { socketStore } from '../lib/socketStore.js';
+    import UserCard from './UserCard.svelte';
+  
+    let users = [];
+    let socketSubscription = null;
+  
+    onMount(() => {
+      socketStore.subscribe((socket) => {
+        if (socket) {
+          socketSubscription = socket;
+          fetchUsers();
+          subscribeToEvents();
+        }
+      });
+    });
+  
+    onDestroy(() => {
+      if (socketSubscription) {
+        unsubscribeFromEvents();
+      }
+    });
+  
+    function fetchUsers() {
+      socketSubscription.emit('global-players-request', (data) => {
+        users = Object.values(data);
+      });
+    }
+  
+    function subscribeToEvents() {
+      socketSubscription.on('user-connected', (user) => {
+        users = [...users, user];
+      });
+  
+      socketSubscription.on('user-disconnected', (user) => {
+        users = users.filter((u) => u.id !== user.id);
+      });
+  
+      socketSubscription.on('user-updated', (user) => {
+        users = users.map((u) => (u.id === user.id ? user : u));
+      });
+    }
+  
+    function unsubscribeFromEvents() {
+      socketSubscription.off('user-connected');
+      socketSubscription.off('user-disconnected');
+      socketSubscription.off('user-updated');
+    }
+  </script>
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    {#each users as user}
+      <UserCard {user} />
+    {/each}
+  </div>
+
+
+
+<!-- <script>
     import { onMount } from 'svelte';
     import { socketStore } from '../lib/socketStore.js';
     import UserCard from './UserCard.svelte';
@@ -43,5 +102,5 @@
             {/each}
         {/if}
     </ul>
-</div>
+</div> -->
 

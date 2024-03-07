@@ -23,9 +23,15 @@
       <h3 class="font-bold text-lg">Enter Lobby Password</h3>
       <input type="password" bind:value={password} class="input input-bordered w-full mt-4" />
       <div class="modal-action">
-        <button class="btn btn-primary" on:click={handleSubmit}>Submit</button>
-        <button class="btn" on:click={handleCancel}>Cancel</button>
+        <button class="btn bg-de-york-600" on:click={handleSubmit}>Submit</button>
+        <button class="btn bg-de-york-600" on:click={handleCancel}>Cancel</button>
       </div>
     </div>
   </div>
 {/if}
+
+<style>
+    button {
+        color: #ECF0F1;
+    }
+</style>

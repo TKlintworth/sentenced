@@ -3,6 +3,7 @@
     import { socketStore } from '../lib/socketStore.js';
     import { username } from '../lib/anonymousUserSessionStore.js';
     import { onMount } from 'svelte';
+    import PasswordModal from './PasswordModal.svelte';
 
     onMount(() => {
         console.log('Landing page mounted');
@@ -28,12 +29,24 @@
     
     function joinLobbyUsingGameCode() {
         // Implementation for joining a game using a game code
-        goto('/join');
+        let lobbyId = enteredGameCode;
+        console.log('Requesting to join lobby: ', lobbyId);
+        selectedLobbyId = lobbyId;
+        $socketStore.emit('check-lobby-password', lobbyId, (requiresPassword) => {
+            if (requiresPassword) {
+                showPasswordModal = true;
+            } else {
+                $socketStore.emit('join-lobby', lobbyId);
+            }
+        });
     }
 
     let nameEntered = false;
     let playButtonText = 'Play';
     let name;
+    let showPasswordModal = false;
+    let selectedLobbyId = null;
+    let enteredGameCode;
     let defaultName = 'Player';
     let nameText = 'your';
 
@@ -56,6 +69,15 @@
         $socketStore.emit('set-name', name);
     }
 
+    function handlePasswordSubmit(event) {
+        const { password } = event.detail;
+        $socketStore.emit('join-lobby', selectedLobbyId, password);
+    }
+
+    function handlePasswordCancel() {
+        selectedLobbyId = null;
+    }
+
     $: playButtonText = nameEntered ? 'Set Name' : 'Play';
 </script>
 
@@ -72,12 +94,13 @@
         {#if nameEntered}
             <section class="sub buttons">
                 <div class="flex">
-                    <input type="text" placeholder="Enter Game Code" class="input input-bordered flex-grow" />
+                    <input bind:value={enteredGameCode} type="text" placeholder="Enter Game Code" class="input input-bordered flex-grow" />
                     <button class="btn btn-de-york-500 hover:bg-de-york-600 ml-2" on:click={joinLobbyUsingGameCode}>Join Game</button>
                 </div>
                 <button class="btn bg-de-york-500  hover:bg-de-york-600" on:click={createLobbyClicked}>Create Lobby</button>
                 <button class="btn bg-de-york-500  hover:bg-de-york-600" on:click={serverBrowserClicked}>Server Browser</button>
             </section>
+            <PasswordModal bind:showModal={showPasswordModal} on:submit={handlePasswordSubmit} on:cancel={handlePasswordCancel} />
         {/if}
     </div>
 </div>

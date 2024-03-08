@@ -110,7 +110,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('create-lobby', (lobbyData) => {
-    handleLobbyCreation(lobbyData);
+    handleLobbyCreation(lobbyData, socket);
   });
 
   socket.on('global-player-count', (cb) => {
@@ -163,7 +163,7 @@ io.on('connection', (socket) => {
 });
 
 // status's could be: waiting for players, playing, finished
-function handleLobbyCreation(lobbyData) {
+function handleLobbyCreation(lobbyData, socket) {
   let lobbyId = nanoid(11);
   lobbies[lobbyId] = {
     id: lobbyId,
@@ -172,12 +172,13 @@ function handleLobbyCreation(lobbyData) {
     hostPlayerName: lobbyData.hostPlayerName,
     createdAt: new Date(),
     //users: [lobbyData.host],
-    userCount: 1,
+    userCount: 0,
     maxUsers: lobbyData.maxUsers,
     status: 'waiting',
     messages: [],
   };
-  io.emit('lobby-created', lobbyId); //lobbies[lobbyId]);
+  socket.emit('lobby-created', lobbyId); //lobbies[lobbyId]);
+  io.emit('new-lobby', lobbies[lobbyId]);
 }
 
 // If the host of a lobby disconnects, randomly assign a new host

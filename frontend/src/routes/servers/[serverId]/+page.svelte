@@ -25,7 +25,7 @@
 
 <main class="container mx-auto">
     <h1 class="text-3xl font-bold mb-8">Lobby</h1>
-    <UserList />
+    <UserList {lobbyId} />
 </main>
 
 <!-- <script>

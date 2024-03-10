@@ -79,11 +79,6 @@ span {
     margin-left: 15px;
 }
 
-.icon {
-    width: 25px; /* Adjust based on your icon's size */
-    height: auto;
-}
-
 .icon-button:hover {
     opacity: 0.8;
 }

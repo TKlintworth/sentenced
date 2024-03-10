@@ -5,6 +5,8 @@
   
     let users = [];
     let socketSubscription = null;
+
+    export let lobbyId;
   
     onMount(() => {
       socketStore.subscribe((socket) => {
@@ -23,28 +25,35 @@
     });
   
     function fetchUsers() {
-      socketSubscription.emit('global-players-request', (data) => {
-        users = Object.values(data);
-      });
+      if(lobbyId) {
+        socketSubscription.emit('lobby-players-request', lobbyId, (data) => {
+          users = Object.values(data);
+        });
+      } else {
+        socketSubscription.emit('global-players-request', (data) => {
+          users = Object.values(data);
+        });
+      }
     }
   
     function subscribeToEvents() {
-      socketSubscription.on('user-connected', (user) => {
+      socketSubscription.on('user-joined-lobby', (user) => {
         users = [...users, user];
       });
   
-      socketSubscription.on('user-disconnected', (user) => {
+      socketSubscription.on('user-left-lobby', (user) => {
         users = users.filter((u) => u.id !== user.id);
       });
   
       socketSubscription.on('user-updated', (user) => {
-        users = users.map((u) => (u.id === user.id ? user : u));
+        //users = users.map((u) => (u.id === user.id ? user : u));
+        console.warn('User updated: ', user);
       });
     }
   
     function unsubscribeFromEvents() {
-      socketSubscription.off('user-connected');
-      socketSubscription.off('user-disconnected');
+      socketSubscription.off('user-joined-lobby');
+      socketSubscription.off('user-left-lobby');
       socketSubscription.off('user-updated');
     }
   </script>

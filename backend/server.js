@@ -14,7 +14,6 @@ import { nanoid } from 'nanoid';
 
 const app = express();
 const httpServer = http.createServer(app);
-let users = [];
 
 let onlineUsers = {};
 let lobbies = {};

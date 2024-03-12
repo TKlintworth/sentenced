@@ -11,12 +11,24 @@
             if (socket){
                 socket.emit('list-lobbies');
                 console.log('Sent list-lobbies request');
-                socket.on('list-lobbies', (newLobbies) => {
-                    console.log('Lobbies: ', newLobbies);
-                    lobbies = newLobbies;
+
+                socket.on('list-lobbies', (listLobbies) => {
+                    console.log('Lobbies: ', listLobbies);
+                    lobbies = listLobbies;
                 });
+
                 socket.on('lobby-created', () => {
                     socket.emit('list-lobbies');
+                });
+
+                socket.on('lobby-updated', (updatedLobby) => {
+                    console.log('Lobby updated: ', updatedLobby);
+                    lobbies[updatedLobby.id] = updatedLobby;
+                });
+
+                socket.on('lobby-deleted', (lobbyId) => {
+                    console.log('Lobby deleted: ', lobbyId);
+                    delete lobbies[lobbyId];
                 });
             }
         });
@@ -28,12 +40,7 @@
 
     function refreshButtonClicked() {
         console.log('Refresh button clicked');
-        socketStore.subscribe((socket) => {
-            if (socket){
-                socket.emit('list-lobbies');
-                console.log('Sent list-lobbies request');
-            }
-        });
+        $socketStore.emit('list-lobbies');
     }
 
     function backButtonClicked() {

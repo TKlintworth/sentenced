@@ -212,6 +212,7 @@ function handleJoinLobbyAttempt(lobbyId, socket, password) {
           socket.to(lobbyId).emit('user-joined-lobby', onlineUsers[socket.id]);
           // Send a message to the user that they have successfully joined the lobby
           socket.emit('lobby-joined', lobbyId);
+          io.emit('lobby-updated', lobbies[lobbyId]);
           return;
         }
       }
@@ -237,6 +238,7 @@ function handleLobbyLeaveAttempt(lobbyId, socket) {
     lobbies[lobbyId].userCount--;
     io.emit('user-updated', onlineUsers[socket.id]);
     socket.to(lobbyId).emit('user-left-lobby', onlineUsers[socket.id]);
+    io.emit('lobby-updated', lobbies[lobbyId]);
 
     if (lobbies[lobbyId].userCount === 0) {
       delete lobbies[lobbyId];

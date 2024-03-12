@@ -45,9 +45,9 @@
         users = users.filter((u) => u.id !== user.id);
       });
   
-      socketSubscription.on('user-updated', (user) => {
-        //users = users.map((u) => (u.id === user.id ? user : u));
-        console.warn('User updated: ', user);
+      socketSubscription.on('user-updated', (userObj) => {
+        console.warn('User updated: ', userObj);
+        users = users.map((u) => (u.id === userObj.id ? userObj : u));
       });
     }
   

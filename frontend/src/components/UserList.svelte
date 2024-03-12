@@ -58,7 +58,7 @@
     }
   </script>
   
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+  <div class="item flex flex-col max-h-[75%] m-4 gap-4">
     {#each users as user}
       <UserCard {user} />
     {/each}

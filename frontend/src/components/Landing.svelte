@@ -7,7 +7,7 @@
 
     onMount(() => {
         console.log('Landing page mounted');
-        let storedUsername = sessionStorage.getItem('sentencio-username');
+        let storedUsername = sessionStorage.getItem('sentencio:username');
         if (storedUsername) {
             console.log('Found stored username and setting: ', storedUsername);
             name = storedUsername;
@@ -58,7 +58,7 @@
 
     $: if (nameEntered && name != '') {
         username.set(name);
-        sessionStorage.setItem('sentencio-username', name);
+        sessionStorage.setItem('sentencio:username', name);
         $socketStore.emit('set-name', name);
         nameText = $username + "'s";
     } else {

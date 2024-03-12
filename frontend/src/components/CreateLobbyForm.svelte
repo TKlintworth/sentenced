@@ -45,7 +45,7 @@
             serverName: document.getElementById('server-name').value,
             password: password,
             maxUsers: document.getElementById('grid-state').value,
-            hostPlayerName: sessionStorage.getItem('sentencio-username')
+            hostPlayerName: sessionStorage.getItem('sentencio:username')
         });
     }
 
@@ -62,7 +62,7 @@
 
 </script>
 
-<div class="flex items-center justify-center min-h-screen bg-gray-900">
+<div class="flex items-center justify-center min-h-[50%] max-h-[75%] bg-gray-900">
   <div class="bg-gray-800 p-8 rounded-lg shadow-lg">
     <h1 class="text-4xl font-bold text-white mb-6">Create Lobby</h1>
     <form class="space-y-6">

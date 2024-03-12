@@ -80,6 +80,7 @@ io.on('connection', (socket) => {
     name: "Anonymous",
     lobby: null,
     createdAt: new Date(),
+    id: socket.id,
   };
 
   onlineUsers[socket.id] = user;

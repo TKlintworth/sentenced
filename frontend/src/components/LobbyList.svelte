@@ -6,6 +6,8 @@
     
     let lobbies = [];
 
+    $: filteredLobbies = Object.entries(lobbies);
+
     onMount(() => {
         socketStore.subscribe((socket) => {
             if (socket){
@@ -24,11 +26,13 @@
                 socket.on('lobby-updated', (updatedLobby) => {
                     console.log('Lobby updated: ', updatedLobby);
                     lobbies[updatedLobby.id] = updatedLobby;
+                    lobbies = {...lobbies};
                 });
 
-                socket.on('lobby-deleted', (lobbyId) => {
-                    console.log('Lobby deleted: ', lobbyId);
-                    delete lobbies[lobbyId];
+                socket.on('lobby-deleted', (deletedLobbyId) => {
+                    delete lobbies[deletedLobbyId];
+                    lobbies = {...lobbies};
+                    console.warn('Lobby deleted: ', deletedLobbyId);
                 });
             }
         });
@@ -51,7 +55,7 @@
 
 <div>
     <div class="lobby-list">
-        {#each Object.entries(lobbies) as [lobbyId, lobby]}
+        {#each filteredLobbies as [lobbyId, lobby]}
             <LobbyCard lobbyId={lobbyId} lobbyData={lobby} />
         {/each}
     </div>

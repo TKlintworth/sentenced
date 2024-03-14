@@ -3,6 +3,7 @@ import http from 'http';
 import { io } from './config/socket.js';
 import * as userController from './controllers/userController.js';
 import * as lobbyController from './controllers/lobbyController.js';
+import * as gameController from './controllers/gameController.js';
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -53,6 +54,15 @@ io.on('connection', (socket) => {
 
   socket.on('check-lobby-password', (lobbyId, callback) => {
     lobbyController.checkLobbyPassword(lobbyId, callback);
+  });
+
+  // GAMECONTROLLER EVENTS
+  socket.on('start-game', (lobbyId) => {
+    gameController.startGame(lobbyId, socket);
+  });
+
+  socket.on('player-ready', (lobbyId) => {
+    gameController.playerReady(lobbyId, socket);
   });
 });
 

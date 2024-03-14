@@ -61,6 +61,22 @@ export function handleLobbyLeaveAttempt(lobbyId, socket) {
         return;
     }
 
+    // If the user is the host, and there are other users in the lobby, assign a new host
+    if (lobby.hostPlayerName === onlineUsers[socket.id].name && lobby.userCount > 1) {
+        console.log('Assigning new host');
+        let newHost = null;
+        for (let user in onlineUsers) {
+            if (onlineUsers[user].lobby === lobbyId && onlineUsers[user].id !== socket.id) {
+                newHost = onlineUsers[user];
+                break;
+            }
+        }
+        if (newHost) {
+            lobbies[lobbyId].hostPlayerName = newHost.name;
+            io.to(lobbyId).emit('lobby-updated', lobbies[lobbyId]);
+        }
+    }
+
     socket.leave(lobbyId);
     console.log(`User ${socket.id} left lobby ${lobbyId}`);
     onlineUsers[socket.id].lobby = null;

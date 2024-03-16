@@ -50,12 +50,6 @@ export function dropzone(node, options){
 
     function handle_dragleave(event){
         event.target.classList.remove(state.dragover_class);
-        //console.warn('dragleave', event.target);
-
-        // Change visibility of the event.target
-        //if (event.target.classList.contains('word') ) {
-        //    event.target.style.display = 'none';
-        //}
     }
 
     function handle_dragover(event){

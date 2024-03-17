@@ -8,6 +8,9 @@
     let visibleWords = [];
     let sentenceWords = [];
     let draggedWord;
+    let draggedIndex = -1;
+    let draggableItem;
+    let pointerStart = { x: 0, y: 0 };
     
     $: if (type === 'sentence') {
         words = [];
@@ -18,42 +21,86 @@
         visibleWords = words;
     }
 
-    function handleWordDragStart(e){
-        // The event data transfer has not been set yet, so we can't hide the word yet in here
-        //console.warn('handleWordDragStart', e);
-        let draggedWord = e.detail.word;
-        //console.warn('draggedWord', draggedWord);
-        //console.warn('e.detail.e.target', e.detail.e.target);
-        // Remove the word from the list
-        // words = words.filter(word => word !== draggedWord);
+    document.addEventListener('mouseup', dragEnd);
+
+    function handleWordDragOver(event) {
+        //console.warn('handleWordDragOver', event);
+        const { targetIndex } = event.detail;
+        console.warn("event:", event);
+        if (draggedIndex !== targetIndex) {
+            console.warn('draggedIndex', draggedIndex, 'targetIndex', targetIndex)
+            const draggedWord = visibleWords[draggedIndex];
+            visibleWords.splice(draggedIndex, 1);
+            visibleWords.splice(targetIndex, 0, draggedWord);
+            visibleWords = [...visibleWords];
+            draggedIndex = targetIndex;
+        }
     }
 
-    function handleWordDragEnd(e){
-        console.warn('handleWordDragEnd', e);
-        let draggedWord = '';
-        //console.warn('draggedWord', draggedWord);
-        //e.detail.e.target.style.display = 'block';
-        // Add the word back to the list
-        // words.push(draggedWord);
+    function handleWordDrop(data, targetIndex, event) {
+        //console.warn('handleWordDrop', data, targetIndex, event);
+        //if (type === 'sentence'){
+            const draggedWord = data;
+            if (!visibleWords.includes(draggedWord)) {
+                visibleWords.splice(targetIndex, 0, draggedWord);
+                visibleWords = [...visibleWords];
+            }
+        //}
+        draggedIndex = -1;
+    }
+
+    function dragStart(e) {
+        e.preventDefault();
+        if (e.target.classList.contains('word')) {
+            draggableItem = e.target;
+        }
+
+        if (!draggableItem) return;
+
+        pointerStart = {
+            x: e.clientX,
+            y: e.clientY
+        };
+
+        draggableItem.classList.remove('is-idle');
+        draggableItem.classList.add('is-draggable');
+
+        document.addEventListener('mousemove', drag);
+    }
+
+    function drag(e) {
+        e.preventDefault();
+        if (!draggableItem) return;
+
+        const dx = e.clientX - pointerStart.x;
+        const dy = e.clientY - pointerStart.y;
+
+        draggableItem.style.transform = `translate(${dx}px, ${dy}px)`;
+    }
+
+    function dragEnd(e) {
+        e.preventDefault();
+        
+        unsetDraggableItem();
+
+        document.removeEventListener('mousemove', drag);
+    }
+
+    function unsetDraggableItem() {
+        if (draggableItem) {
+            draggableItem.style = null;
+            draggableItem.classList.remove('is-draggable');
+            draggableItem.classList.add('is-idle');
+            draggableItem = null;
+        }
     }
 
 </script>
-
-    <div class="word-container m-2" class:sentence-container={type === 'sentence'} use:dropzone={{
-        on_dropzone(d, e){
-            // Get the index of the word we dropped onto, if any
-
-            // A word has been dropped onto this word container.
-            if (type === 'sentence'){
-                if (!words.includes(d)){
-                    visibleWords.push(d);
-                    visibleWords = [...visibleWords];
-                } 
-            }
-        },
-    }}>
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <div class="word-container m-2" class:sentence-container={type === 'sentence'}
+        on:mousedown={dragStart}>
         {#each visibleWords as word}
-            <Word word={word} on:dragstart={handleWordDragStart} on:dragend={handleWordDragEnd}></Word>
+            <Word word={word}></Word>
         {/each}
     </div>
 

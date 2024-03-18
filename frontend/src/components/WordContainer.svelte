@@ -1,6 +1,5 @@
 <script>
     import Word from "./Word.svelte";
-    import { draggable, dropzone } from "$lib/dnd";
 
     export let type; // 'words' or 'sentence'
     export let words;

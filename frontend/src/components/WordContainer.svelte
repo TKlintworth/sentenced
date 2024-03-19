@@ -48,6 +48,14 @@
         draggedIndex = -1;
     }
 
+    function initItemsState() {
+        getIdleItems().forEach((item, i) => {
+            if (getAllItems().indexOf(draggableItem) > i) {
+            item.dataset.isAbove = ''
+            }
+        })
+    }
+
     function dragStart(e) {
         e.preventDefault();
         if (e.target.classList.contains('word')) {

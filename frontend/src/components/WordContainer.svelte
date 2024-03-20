@@ -15,7 +15,7 @@
     let itemsGap = 0;
 
     $: if (type === 'sentence') {
-        sentenceStore.set(["test"])
+        sentenceStore.set(["test", "another", "hello"])
         visibleWords = $sentenceStore;
     } else {
         words = ['apple', 'banana', 'cherry', 'date', 'elderberry', 'fig', 'grape', 'honeydew', 'kiwi', 'lemon', 'mango', 'nectarine',
@@ -120,15 +120,51 @@
         updateIdleItemsStatesAndPositions();
     }
 
-    function updateIdleItemsStatesAndPositions() {
-        
+    function isItemLeft(item) {
+        const itemRect = item.getBoundingClientRect();
+        const itemCenterX = itemRect.left + itemRect.width / 2;
+        const draggableItemRect = draggableItem.getBoundingClientRect();
+        const draggableItemCenterX = draggableItemRect.left + draggableItemRect.width / 2;
 
+        return draggableItemCenterX < itemCenterX;
+    }
+
+    function isItemRight(item) {
+        return !isItemLeft(item);
+    }
+
+    function updateIdleItemsStatesAndPositions() {
+        console.warn('updateIdleItemsStatesAndPositions');
+        const draggableItemRect = draggableItem.getBoundingClientRect();
+        const draggableItemCenterX = draggableItemRect.left + draggableItemRect.width / 2;
+        const ITEMS_GAP = 10;
+        const idleItems = getIdleItems();
+
+        for (let i = 0; i < idleItems.length; i++) {
+            const item = idleItems[i];
+            const itemRect = item.getBoundingClientRect();
+
+            if (
+                draggableItemCenterX >= itemRect.left &&
+                draggableItemCenterX <= itemRect.right
+            ) {
+                if (isItemLeft(item)) {
+                    console.warn("Drags to the left");
+                    item.style.transform = `translate(${draggableItemRect.width + ITEMS_GAP}px, 0)`;
+                } else {
+                    console.warn("Drags to the right");
+                    item.style.transform = `translate(-${draggableItemRect.width + ITEMS_GAP}px, 0)`;
+                }
+            } else {
+                item.style.transform = '';
+            }
+        }
     }
 
     function dragEnd(e) {
         e.preventDefault();
 
-        console.warn('dragEnd', e)
+        // console.warn('dragEnd', e)
         
         unsetDraggableItem();
 

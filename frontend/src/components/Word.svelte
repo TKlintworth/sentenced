@@ -1,7 +1,6 @@
 <script>
     export let word;
     export let ghost = false;
-    import { draggable } from "$lib/dnd";
     
     function wordClicked(){
         //console.log('word clicked', word)
@@ -46,7 +45,7 @@
         transition: 0.25s ease transform;
     }
 
-    .word.is-draggable {
+    :global(.word.is-draggable) {
         cursor: grabbing;
         z-index: 10;
     }

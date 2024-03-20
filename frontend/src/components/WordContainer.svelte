@@ -1,15 +1,21 @@
 <script>
+    import { onMount, onDestroy, tick } from "svelte";
     import Word from "./Word.svelte";
 
     export let type; // 'words' or 'sentence'
     export let words;
 
     let visibleWords = [];
-    let sentenceWords = [];
-    let draggedWord;
-    let draggedIndex = -1;
     let draggableItem;
     let pointerStart = { x: 0, y: 0 };
+    let sentenceContainer;
+
+    function handleBinding(node) {
+        console.warn('handleBinding', node)
+        if (type === 'sentence') {
+            sentenceContainer = node;
+        }
+    }
     
     $: if (type === 'sentence') {
         words = [];
@@ -20,33 +26,9 @@
         visibleWords = words;
     }
 
-    document.addEventListener('mouseup', dragEnd);
-
-    function handleWordDragOver(event) {
-        //console.warn('handleWordDragOver', event);
-        const { targetIndex } = event.detail;
-        console.warn("event:", event);
-        if (draggedIndex !== targetIndex) {
-            console.warn('draggedIndex', draggedIndex, 'targetIndex', targetIndex)
-            const draggedWord = visibleWords[draggedIndex];
-            visibleWords.splice(draggedIndex, 1);
-            visibleWords.splice(targetIndex, 0, draggedWord);
-            visibleWords = [...visibleWords];
-            draggedIndex = targetIndex;
-        }
-    }
-
-    function handleWordDrop(data, targetIndex, event) {
-        //console.warn('handleWordDrop', data, targetIndex, event);
-        //if (type === 'sentence'){
-            const draggedWord = data;
-            if (!visibleWords.includes(draggedWord)) {
-                visibleWords.splice(targetIndex, 0, draggedWord);
-                visibleWords = [...visibleWords];
-            }
-        //}
-        draggedIndex = -1;
-    }
+    onMount(() => {
+        document.addEventListener('mouseup', dragEnd);
+    });
 
     function initItemsState() {
         getIdleItems().forEach((item, i) => {
@@ -83,6 +65,17 @@
         const dy = e.clientY - pointerStart.y;
 
         draggableItem.style.transform = `translate(${dx}px, ${dy}px)`;
+
+        const afterElement = getDragAfterElement(sentenceContainer, dx, dy)
+        if (afterElement == null) {
+            sentenceContainer.appendChild(draggableItem)
+        } else {
+            sentenceContainer.insertBefore(draggableItem, afterElement)
+        }
+    }
+
+    function getDragAfterElement(container, x, y) {
+        console.warn('getDragAfterElement', container, x, y)
     }
 
     function dragEnd(e) {
@@ -105,7 +98,8 @@
 </script>
     <!-- svelte-ignore a11y-no-static-element-interactions -->
     <div class="word-container m-2" class:sentence-container={type === 'sentence'}
-        on:mousedown={dragStart}>
+        on:mousedown={dragStart}
+        use:handleBinding>
         {#each visibleWords as word}
             <Word word={word}></Word>
         {/each}

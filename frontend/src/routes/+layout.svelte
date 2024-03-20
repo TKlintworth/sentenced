@@ -1,10 +1,7 @@
 <script>
     import "../app.css";
     import Header from "../components/Header.svelte";
-    import Footer from "../components/Footer.svelte";
-    import Button from "../components/Button.svelte";
-    import Landing from "../components/Landing.svelte";
-    
+    import Footer from "../components/Footer.svelte";    
     import { onMount } from 'svelte';
     import { socketStore } from '../lib/socketStore.js';
 

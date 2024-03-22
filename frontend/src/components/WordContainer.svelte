@@ -62,10 +62,6 @@
         itemsGap = Math.abs(item1Rect.right - item2Rect.left);
     }
 
-    function disablePageScroll() {
-        document.body.style.overflow = 'hidden';
-        document.body.style.userSelect = 'none';
-    }
 
     function initDraggableItem() {
         draggableItem.classList.remove('is-idle');

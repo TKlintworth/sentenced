@@ -164,8 +164,6 @@
     function dragEnd(e) {
         e.preventDefault();
 
-        // console.warn('dragEnd', e)
-        
         unsetDraggableItem();
 
         document.removeEventListener('mousemove', drag);

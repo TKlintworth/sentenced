@@ -159,8 +159,16 @@
 
     function dragEnd(e) {
         e.preventDefault();
-
+        
         unsetDraggableItem();
+        if (type === 'sentence') {
+            console.warn('dragEnd', e);
+            console.warn(e.target.innerText);
+            console.warn(draggableItem);
+            // Drop the dragged item into the sentence container
+            visibleWords = [...visibleWords, e.target.innerText];
+        }
+
 
         document.removeEventListener('mousemove', drag);
     }

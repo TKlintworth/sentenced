@@ -161,6 +161,8 @@
         e.preventDefault();
         
         unsetDraggableItem();
+        // If the dragged item came from the same container, the visibleWords will stay the same
+
         if (type === 'sentence') {
             console.warn('dragEnd', e);
             console.warn(e.target.innerText);

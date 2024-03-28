@@ -7,9 +7,6 @@ const createSocketConnection = () => {
     const connect = () => {
       const socket = io('http://localhost:3000'); // Your server URL
   
-      // You can set up your event listeners here
-      // socket.on('event-name', (data) => { ... });
-  
       set(socket); // Store the socket instance
     };
   

@@ -136,6 +136,15 @@
         const ITEMS_GAP = 10;
         const idleItems = getIdleItems();
 
+        // Get the height of sentence container and check if the draggableitemcenter is within the bounds vertically and horizontally
+        const sentenceContainerRect = sentenceContainer.getBoundingClientRect();
+        const draggableItemCenterY = draggableItemRect.top + draggableItemRect.height / 2;
+        if (draggableItemCenterY < sentenceContainerRect.top || draggableItemCenterY > sentenceContainerRect.bottom) {
+            console.warn('Out of bounds');
+            return;
+        } 
+                
+
         for (let i = 0; i < idleItems.length; i++) {
             const item = idleItems[i];
             const itemRect = item.getBoundingClientRect();

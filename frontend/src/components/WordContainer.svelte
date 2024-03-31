@@ -140,7 +140,6 @@
         const sentenceContainerRect = sentenceContainer.getBoundingClientRect();
         const draggableItemCenterY = draggableItemRect.top + draggableItemRect.height / 2;
         if (draggableItemCenterY < sentenceContainerRect.top || draggableItemCenterY > sentenceContainerRect.bottom) {
-            console.warn('Out of bounds');
             return;
         } 
                 

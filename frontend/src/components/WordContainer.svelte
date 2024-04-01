@@ -170,11 +170,17 @@
         
         unsetDraggableItem();
         // If the dragged item came from the same container, the visibleWords will stay the same
+        // naive is to just not allow a duplicate word to be dragged into the sentence container
+        // do that
 
         if (type === 'sentence') {
             console.warn('dragEnd', e);
             console.warn(e.target.innerText);
             console.warn(draggableItem);
+            if (visibleWords.includes(e.target.innerText)) {
+                return;
+            }
+            
             visibleWords = [...visibleWords, e.target.innerText];
         }
 

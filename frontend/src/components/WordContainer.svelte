@@ -167,6 +167,8 @@
 
     function dragEnd(e) {
         e.preventDefault();
+        // if this was just a click, return
+        if (!draggableItem) return;
         
         unsetDraggableItem();
         // If the dragged item came from the same container, the visibleWords will stay the same
@@ -180,7 +182,7 @@
             if (visibleWords.includes(e.target.innerText)) {
                 return;
             }
-            
+
             visibleWords = [...visibleWords, e.target.innerText];
         }
 

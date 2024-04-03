@@ -135,6 +135,14 @@
         const ITEMS_GAP = 10;
         const idleItems = getIdleItems();
 
+        // Get the height of sentence container and check if the draggableitemcenter is within the bounds vertically and horizontally
+        const sentenceContainerRect = sentenceContainer.getBoundingClientRect();
+        const draggableItemCenterY = draggableItemRect.top + draggableItemRect.height / 2;
+        if (draggableItemCenterY < sentenceContainerRect.top || draggableItemCenterY > sentenceContainerRect.bottom) {
+            return;
+        } 
+                
+
         for (let i = 0; i < idleItems.length; i++) {
             const item = idleItems[i];
             const itemRect = item.getBoundingClientRect();
@@ -158,15 +166,22 @@
 
     function dragEnd(e) {
         e.preventDefault();
+        // if this was just a click, return
+        if (!draggableItem) return;
         
         unsetDraggableItem();
         // If the dragged item came from the same container, the visibleWords will stay the same
+        // naive is to just not allow a duplicate word to be dragged into the sentence container
+        // do that
 
         if (type === 'sentence') {
             console.warn('dragEnd', e);
             console.warn(e.target.innerText);
             console.warn(draggableItem);
-            // Drop the dragged item into the sentence container
+            if (visibleWords.includes(e.target.innerText)) {
+                return;
+            }
+
             visibleWords = [...visibleWords, e.target.innerText];
         }
 

@@ -10,7 +10,7 @@
     let draggableItem;
     let pointerStart = { x: 0, y: 0 };
     let sentenceContainer;
-    let maxSentenceLength = 14;
+    //let maxSentenceLength = 14;
     let items = [];
     let itemsGap = 0;
 
@@ -28,7 +28,6 @@
     });
     
     function handleBinding(node) {
-        console.warn('handleBinding', node)
         if (type === 'sentence') {
             sentenceContainer = node;
         } else {

@@ -10,7 +10,6 @@
     let draggableItem;
     let pointerStart = { x: 0, y: 0 };
     let sentenceContainer;
-    //let maxSentenceLength = 14;
     let items = [];
     let itemsGap = 0;
 

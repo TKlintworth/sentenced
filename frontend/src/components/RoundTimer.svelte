@@ -3,13 +3,12 @@
   import { tweened } from 'svelte/motion';
   import { cubicOut } from 'svelte/easing';
 
-  export let roundTime = 60; // Default round time in seconds
+  export let roundTime = 60;
   let countdownValue = tweened(roundTime, {
     duration: 1000,
     easing: cubicOut
   });
 
-  // Countdown function
   const countdown = () => {
     if (roundTime > 0) {
       setTimeout(() => {
@@ -21,7 +20,7 @@
   };
 
   onMount(() => {
-    countdown(); // Start the countdown
+    countdown();
   });
 </script>
 

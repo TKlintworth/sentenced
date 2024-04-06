@@ -33,6 +33,7 @@
 <main class="container mx-auto">
     <h1 class="text-3xl font-bold mb-8">Lobby</h1>
     {#if $page.params.serverId}
+        <RoundTimer />
         <h1>Server ID: {$page.params.serverId}</h1>
         <UserList {lobbyId} />
     {/if}

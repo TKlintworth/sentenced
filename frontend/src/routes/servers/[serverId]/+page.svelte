@@ -14,14 +14,12 @@
     onMount(() => {
         unsubscribe = socketStore.subscribe((socket) => {
             if (socket) {
-                // Join the lobby when the component is mounted
                 socket.emit('join-lobby', lobbyId);
             }
         });
     });
 
     onDestroy(() => {
-        // Leave the lobby when the component is unmounted
         $socketStore.emit('leave-lobby', lobbyId);
 
         if (unsubscribe) {

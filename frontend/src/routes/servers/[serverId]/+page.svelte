@@ -10,7 +10,6 @@
     const lobbyId = $page.params.serverId;
     let unsubscribe;
 
-    // Subscribe to the socket store
     onMount(() => {
         unsubscribe = socketStore.subscribe((socket) => {
             if (socket) {

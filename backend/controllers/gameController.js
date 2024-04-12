@@ -22,3 +22,8 @@ function checkAllPlayersReady(lobbyId) {
         readyPlayers = 0;
     }
 }
+
+export function endGame(lobbyId, socket) {
+    console.log(`Game ended in lobby ${lobbyId}`);
+    socket.to(lobbyId).emit('game-ended');
+}

@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import { get } from 'svelte/store';
     import { goto } from '$app/navigation';
-    import { socketStore } from '../lib/socketStore.js';
+    import { socketStore } from '../../lib/socketStore.js';
     import LobbyCard from './LobbyCard.svelte';
     
     let lobbies = [];

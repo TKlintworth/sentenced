@@ -1,10 +1,10 @@
 <script>
     import "../app.css";
-    import Header from "../components/Header.svelte";
-    import Footer from "../components/Footer.svelte";    
+    import Header from "../components/layouts/Header.svelte";
+    import Footer from "../components/layouts/Footer.svelte";
     import { onMount, onDestroy } from 'svelte';
     import { socketStore } from '../lib/socketStore.js';
-    import ErrorBoundary from "../components/ErrorBoundary.svelte";
+    import ErrorBoundary from "../components/layouts/ErrorBoundary.svelte";
 
     let connectionStatus = 'disconnected';
 

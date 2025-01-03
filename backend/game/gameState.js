@@ -7,7 +7,7 @@ export const gameState = writable({
         id: 0,
         name: 'Game',
         description: 'Game description',
-        status: 'waiting',
+        status: 'waiting', // make an enum
         players: [],
         maxPlayers: 2,
         minPlayers: 2,

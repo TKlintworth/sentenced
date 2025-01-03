@@ -2,8 +2,8 @@
     import { onDestroy, onMount } from 'svelte';
     import { socketStore } from '$lib/socketStore.js';
     import { page } from '$app/stores';
-    import UserList from '../../../components/UserList.svelte';
-    import RoundTimer from '../../../components/RoundTimer.svelte';
+    import UserList from '../../../components/users/UserList.svelte';
+    import RoundTimer from '../../../components/game-pieces/RoundTimer.svelte';
 
     const lobbyId = $page.params.serverId;
     let unsubscribe;

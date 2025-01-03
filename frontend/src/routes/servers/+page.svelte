@@ -1,6 +1,6 @@
 <script>
-    import LobbyList from "../../components/LobbyList.svelte";
-    import UserList from "../../components/UserList.svelte";
+    import LobbyList from "../../components/lobby/LobbyList.svelte";
+    import UserList from "../../components/users/UserList.svelte";
   </script>
   
   <div class="container">

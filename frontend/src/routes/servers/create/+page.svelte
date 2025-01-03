@@ -1,5 +1,5 @@
 <script>
-    import CreateLobbyForm from '../../../components/CreateLobbyForm.svelte';
+    import CreateLobbyForm from '../../../components/lobby/CreateLobbyForm.svelte';
   </script>
   
   <CreateLobbyForm></CreateLobbyForm>

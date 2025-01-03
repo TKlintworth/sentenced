@@ -1,5 +1,5 @@
 <script>
-    import { socketStore } from '../lib/socketStore.js';
+    import { socketStore } from '../../lib/socketStore.js';
     import { onMount } from 'svelte';
 
     

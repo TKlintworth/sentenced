@@ -93,7 +93,7 @@ export function handleLobbyCreation(lobbyData, socket) {
             userCount: 0,
             maxUsers: lobbyData.maxUsers,
             status: 'waiting',
-            messages: [],
+            messages: []
         };
         socket.emit('lobby-created', lobbyId); //lobbies[lobbyId]);
         io.emit('new-lobby', lobbies[lobbyId]);

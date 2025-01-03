@@ -1,7 +1,7 @@
 <script>
     import { goto } from '$app/navigation';
-    import { socketStore } from '../lib/socketStore.js';
-    import { username } from '../lib/anonymousUserSessionStore.js';
+    import { socketStore } from '../../lib/socketStore.js';
+    import { username } from '../../lib/anonymousUserSessionStore.js';
     import { onMount } from 'svelte';
     import PasswordModal from './PasswordModal.svelte';
 

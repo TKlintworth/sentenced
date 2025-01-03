@@ -1,8 +1,8 @@
 <script>
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
-    import { socketStore } from '../lib/socketStore.js';
-    import PasswordModal from './PasswordModal.svelte';
+    import { socketStore } from '../../lib/socketStore.js';
+    import PasswordModal from '../layouts/PasswordModal.svelte';
 
     export let lobbyId;
     export let lobbyData;

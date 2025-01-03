@@ -1,5 +1,5 @@
 <script>    
-    import WordContainer from '../../components/WordContainer.svelte';
+    import WordContainer from '../../components/game-pieces/WordContainer.svelte';
 
 </script>
 <div class="playScreenContainer">

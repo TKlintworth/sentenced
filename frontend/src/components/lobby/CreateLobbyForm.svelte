@@ -1,7 +1,7 @@
 <script>
     import { goto } from '$app/navigation';
     import { onMount } from 'svelte';
-    import { socketStore } from '../lib/socketStore.js';
+    import { socketStore } from '../../lib/socketStore.js';
 
     let passwordBoolean = false;
     let socketSubscription = null;

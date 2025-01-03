@@ -1,6 +1,6 @@
 <script>
     import { onMount, onDestroy } from 'svelte';
-    import { socketStore } from '../lib/socketStore.js';
+    import { socketStore } from '../../lib/socketStore.js';
     import UserCard from './UserCard.svelte';
   
     let users = [];

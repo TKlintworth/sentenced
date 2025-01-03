@@ -5,14 +5,19 @@ import onlineUsers from '../sharedData/onlineUsers.js';
 import  { errorHandler } from '../utils/errorHandler.js';
 import { ErrorTypes } from '../utils/constants.js';
 import { validateUsername } from '../utils/validation.js';
+import User from "../models/User.js";
+
+const user = new User();
 
 export function handleUserConnection(socket) {
     try {
+        // Make a user type
         let user = {
             name: "Anonymous",
             lobby: null,
             createdAt: new Date(),
-            id: socket.id,
+            id: socket.id, //connection-id
+            status: "" // user state status
         };
     
         onlineUsers[socket.id] = user;

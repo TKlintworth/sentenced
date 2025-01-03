@@ -3,7 +3,7 @@ import { io } from '../config/socket.js';
 import onlineUsers from '../sharedData/onlineUsers.js';
 import lobbies from '../sharedData/lobbies.js';
 import { errorHandler } from '../utils/errorHandler.js';
-import { GameState } from '../models/GameState.js';
+import { GameState } from '../models-old/GameState.js';
 import { ErrorTypes } from '../utils/constants.js';
 
 const gameStates = {};

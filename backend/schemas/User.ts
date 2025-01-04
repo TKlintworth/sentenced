@@ -1,11 +1,4 @@
-export enum UserStatus 
-{    
-    Unauthenticated = "unauthenticated",
-    Pending = "pending",
-    Authenticated = "authenticated",
-    ConnectedToLobby = "connected",
-    Error = "error"
-}
+import { UserStatus } from "../models/users";
 
 export class User
 {

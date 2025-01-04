@@ -1,17 +1,21 @@
 import { Socket } from 'socket.io';
 import { Game } from '../models/Game';
+import { User } from '../models/User';
 
 export class GameController {
-	public createGame()
-	{
+	public games: Game[] = [];
 
+	public createGame(players: User[], maxRounds: number): Game
+	{
+		const game = new Game(players, maxRounds);
+		this.games.push(game);
+		return game;
 	}
 
-	public startGame() {
+	public startGame(game: Game) {
 		try 
 		{
-
-			const game = new Game();
+			
 			// add game to game states
 			//- POST /game/start
 			//- { status, round, sentences }

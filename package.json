@@ -1,0 +1,11 @@
+{
+  "name": "dontyarninroot",
+  "version": "1.0.0",
+  "description": "Don't yarn here",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "preinstall": "echo \"Don't yarn here. You're in the wrong folder\" && exit 1"
+  }
+}

@@ -1,5 +1,6 @@
-import { Message } from "./Message";
-import { User } from "./User";
+import { z as Z } from "zod";
+import { MessageDto } from "./messages";
+import { UserDto } from "./users";
 
 export enum LobbyStatus 
 {
@@ -7,35 +8,24 @@ export enum LobbyStatus
     Waiting = "waiting"
 }
 
-export class Lobby
-{
-    public name: string;
-    public createdAt: Date; 
-    public id: string;
-    public users: User[];
-    public maxUsers: number;
-    public status: LobbyStatus = LobbyStatus.Waiting;
-    public messages: Message[] = [];
-    public password?: string;
-    public owner: User;
-   
-    constructor(name: string, users: User[], maxUsers: number, owner: User, password?: string)
-    {
-        this.name = name;
-        this.users = users; // validation?
-        this.owner = owner;
+export const LobbyDto = Z.object({
+    name: Z.string(),
+    createdAt: Z.date(),
+    id: Z.string(),
+    users: Z.array(UserDto),
+    maxUsers: Z.number().min(1).max(10), // make these env variables
+    status: Z.enum([LobbyStatus.Started, LobbyStatus.Waiting]),
+    messages: Z.array(MessageDto).optional(),
+    password: Z.string().optional(),
+    owner: UserDto,
+});
 
-        if (password)
-            this.password;
-        
-        if (maxUsers > 0)
-            this.maxUsers = maxUsers;
-        else
-            throw new Error("You've forgotten to make max users more than 0!");
-    }
+export const CreateLobbyRequest = Z.object({
+    name: Z.string(),
+    users: Z.array(UserDto),
+    maxUsers: Z.number().min(1).max(10), // make these env variables
+    password: Z.string().optional(),
+    owner: Z.string()
+});
 
-    public addMessage(message: Message): void
-    {
-        this.messages.push(message);
-    }
-}
+export type CreateLobbyRequest = Z.infer<typeof CreateLobbyRequest>;

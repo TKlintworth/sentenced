@@ -6,7 +6,7 @@ import { LobbyStatus } from "../models";
 export class Lobby
 {
     public name: string;
-    public createdAt: Date = new Date();
+    public createdAt: Date;
     public id: string;
     public users: User[] = [];
     public maxUsers: number;
@@ -18,6 +18,7 @@ export class Lobby
     constructor()
     {
         this.id = nanoid();
+        this.createdAt = new Date();
     }
 
     public addMessage(message: Message): void

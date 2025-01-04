@@ -1,8 +1,11 @@
+// TODO: Unify strings everywhere in the client
+
 export const SocketEvents =
 {
     Lobby: 
     {
-        CreateLobby: "create-lobby"
+        CreateLobby: "create-lobby",
+        UserJoined: "user-joined"
     },
     Game:
     {

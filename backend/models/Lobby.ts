@@ -28,4 +28,11 @@ export const CreateLobbyRequest = Z.object({
     owner: Z.string()
 });
 
+export const JoinLobbyRequest = Z.object({
+    id: Z.string(),
+    userId: Z.string(),
+    password: Z.string().optional()
+});
+
 export type CreateLobbyRequest = Z.infer<typeof CreateLobbyRequest>;
+export type JoinLobbyRequest = Z.infer<typeof JoinLobbyRequest>;

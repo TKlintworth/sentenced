@@ -7,7 +7,7 @@ export class User
     public password: string;
     public createdAt: Date; //required
     public id: string; //required
-    public status: UserStatus = UserStatus.Unauthenticated //required
+    public status: UserStatus = UserStatus.Offline //required
 
     constructor(name: string, password: string, email?: string)
     {

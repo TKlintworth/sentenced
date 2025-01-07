@@ -1,29 +1,49 @@
-import { Socket } from 'socket.io';
-import { Game } from '../models/Game';
-import { User } from '../models/User';
+import { LobbyStatus } from "../models";
+import { CreateGameRequest } from "../models/games";
+import { Game } from "../schemas/Game";
+import LobbyService from "../services/LobbyService";
+import * as HttpStatusCodes from "http-status-codes";
 
-export class GameController {
-	public games: Game[] = [];
+export class GameController
+{
+    public async createGame(req: CreateGameRequest)
+    {
+        const game = new Game();
 
-	public createGame(players: User[], maxRounds: number): Game
-	{
-		const game = new Game(players, maxRounds);
-		this.games.push(game);
-		return game;
-	}
+        game.maxRounds = req.maxRounds;
+        game.roundLength = req.roundLength;
 
-	public startGame(game: Game) {
-		try 
-		{
-			
-			// add game to game states
-			//- POST /game/start
-			//- { status, round, sentences }
-			// - Client cannot start game until all user statuses are ready
-			// - Server returns an initialized game object
-		}
-		catch (err) {
-			// error handler
-		}
-	}
+        // game.save() // TODO: Do this
+    }
+
+    public async startGame(req: StartGameRequest)
+    {
+        const lobby = await LobbyService.findById(req.id);
+
+        if (lobby)
+            return HttpStatusCodes.StatusCodes.NOT_FOUND;
+
+        const game = await GameService.findById(req.id);
+        
+        if (game)
+            return HttpStatusCodes.StatusCodes.NOT_FOUND;
+
+        lobby.game = game.id;
+        lobby.status = LobbyStatus.Started;
+    }
+
+    public async endGame(req: EndGameRequest)
+    {
+        const lobby = await LobbyService.findById(req.id);
+
+        if (lobby)
+            return HttpStatusCodes.StatusCodes.NOT_FOUND;
+
+        lobby.status = LobbyStatus.Waiting;
+    }
+
+    public async endRound()
+    {
+        // TODO: do
+    }
 }

@@ -11,6 +11,7 @@ export class Lobby
     public users: User[] = [];
     public maxUsers: number;
     public status: LobbyStatus = LobbyStatus.Waiting;
+    public game?: string;
     public messages: Message[] = [];
     public password?: string;
     public owner: string; // eventually our DB will showing the object vs id, more on that later

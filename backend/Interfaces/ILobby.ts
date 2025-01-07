@@ -10,6 +10,7 @@ export interface ILobby
     users: User[];
     maxUsers: number;
     status: LobbyStatus;
+    game?: string;
     messages: Message[];
     password?: string;
     owner: User;

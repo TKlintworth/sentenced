@@ -1,23 +1,19 @@
+import { nanoid } from "nanoid";
 import { UserStatus } from "../models/users";
 
 export class User
 {
-    public name: string; //required 
+    public name: string;
     public email?: string;
-    public password: string;
-    public createdAt: Date; //required
-    public id: string; //required
-    public status: UserStatus = UserStatus.Offline //required
+    public password?: string;
+    public createdAt: Date;
+    public id: string;
+    public status: UserStatus = UserStatus.Offline
 
-    constructor(name: string, password: string, email?: string)
+    constructor()
     {
-        this.name = name;
-        this.password = password;
-        
         this.createdAt = new Date();
-        
-        if (email)
-            this.email = email;
+        this.id = nanoid();
     }
 
     public setStatus()

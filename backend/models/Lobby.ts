@@ -14,6 +14,7 @@ export const LobbyDto = Z.object({
     id: Z.string(),
     users: Z.array(UserDto),
     maxUsers: Z.number().min(1).max(10), // make these env variables
+    game: Z.string().optional(),
     status: Z.enum([LobbyStatus.Started, LobbyStatus.Waiting]),
     messages: Z.array(MessageDto).optional(),
     password: Z.string().optional(),
@@ -34,5 +35,16 @@ export const JoinLobbyRequest = Z.object({
     password: Z.string().optional()
 });
 
+export const ExitLobbyRequest = Z.object({
+    id: Z.string(),
+    userId: Z.string()
+});
+
+export const ListLobbiesResponse = Z.object({
+    lobbies: Z.array(LobbyDto)
+});
+
 export type CreateLobbyRequest = Z.infer<typeof CreateLobbyRequest>;
 export type JoinLobbyRequest = Z.infer<typeof JoinLobbyRequest>;
+export type ExitLobbyRequest = Z.infer<typeof ExitLobbyRequest>;
+export type ListLobbiesResponse = Z.infer<typeof ListLobbiesResponse>;

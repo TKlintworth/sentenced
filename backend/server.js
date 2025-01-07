@@ -1,9 +1,9 @@
 import express from 'express';
 import http from 'http';
 import { io } from './config/socket.js';
-import * as userController from './controllers/userController.js';
-import * as lobbyController from './controllers/LobbyController';
 import { GameController } from './controllers/GameController';
+import { LobbyController } from './controllers/LobbyController';
+import { UserController } from './controllers/UserController';
 import { errorHandler } from './utils/errorHandler.js';
 import { ErrorTypes } from './utils/constants.js';
 import { SocketEvents } from './events/events.js';
@@ -17,8 +17,8 @@ io.on('connection', (socket) => {
 	// Now the socket represents a connection to a specific client
 	userController.handleUserConnection(socket);
 
-	// USERCONTROLLER EVENTS
-	socket.on('set-name', (name) => {
+	// USER CONTROLLER EVENTS
+	socket.on(SocketEvents.User.CreateUser, (name) => {
 		try {
 			userController.handleSetName(name, socket);
 		} catch (error) {
@@ -26,57 +26,49 @@ io.on('connection', (socket) => {
 		}
 	});
 
-	socket.on('disconnect', () => {
-		try {
-			gameController.handlePlayerDisconnect(socket);
-			userController.handleUserDisconnection(socket);
-		} catch (error) {
-			errorHandler(socket, ErrorTypes.USER_DISCONNECTION, error.message);
-		}
-	});
+	// socket.on('disconnect', () => {
+	// 	try {
+	// 		gameController.handlePlayerDisconnect(socket);
+	// 		userController.handleUserDisconnection(socket);
+	// 	} catch (error) {
+	// 		errorHandler(socket, ErrorTypes.USER_DISCONNECTION, error.message);
+	// 	}
+	// });
 
-	socket.on('global-player-count', (cb) => {
+	socket.on(SocketEvents.User.ListAllUsers, () => {
 		try {
-			userController.handleGlobalPlayerCount(cb);
-		} catch (error) {
-			errorHandler(socket, 'PLAYER_COUNT_ERROR', error.message);
-		}
-	});
-
-	socket.on('global-players-request', (cb) => {
-		try {
-			userController.handleGlobalPlayersRequest(cb);
+			UserController.listUsers();
 		} catch (error) {
 			errorHandler(socket, 'PLAYERS_REQUEST_ERROR', error.message);
 		}
 	});
 
-	// LOBBYCONTROLLER EVENTS
+	// LOBBY CONTROLLER EVENTS
 	socket.on(SocketEvents.Lobby.CreateLobby, (lobbyData) => {
 		try {
-			lobbyController.handleLobbyCreation(lobbyData, socket);
+			LobbyController.createLobby(lobbyData, socket);
 		} catch (error) {
 			errorHandler(socket, 'CREATE_LOBBY_ERROR', error.message);
 		}
 	});
 
-	socket.on('list-lobbies', () => {
+	socket.on(SocketEvents.Lobby.ListAllLobbies, () => {
 		try {
-			lobbyController.listLobbies();
+			LobbyController.listLobbies();
 		} catch (error) {
 			errorHandler(socket, 'LIST_LOBBIES_ERROR', error.message);
 		}
 	});
 
-	socket.on('join-lobby', (lobbyId, password) => {
+	socket.on(SocketEvents.Lobby.UserJoined, (lobbyId, password) => {
 		try {
-			lobbyController.handleJoinLobbyAttempt(lobbyId, socket, password);
+			LobbyController.joinLobby(lobbyId, socket, password);
 		} catch (error) {
 			errorHandler(socket, 'JOIN_LOBBY_ERROR', error.message);
 		}
 	});
 
-	socket.on('leave-lobby', (lobbyId) => {
+	socket.on(SocketEvents.Lobby.LeaveLobby, (lobbyId) => {
 		try {
 			lobbyController.handleLobbyLeaveAttempt(lobbyId, socket);
 		} catch (error) {
@@ -84,23 +76,7 @@ io.on('connection', (socket) => {
 		}
 	});
 
-	socket.on('lobby-players-request', (lobbyId, cb) => {
-		try {
-			lobbyController.handleLobbyPlayersRequest(lobbyId, cb);
-		} catch (error) {
-			errorHandler(socket, 'LOBBY_PLAYERS_REQUEST_ERROR', error.message);
-		}
-	});
-
-	socket.on('check-lobby-password', (lobbyId, callback) => {
-		try {
-			lobbyController.checkLobbyPassword(lobbyId, callback);
-		} catch (error) {
-			errorHandler(socket, 'CHECK_PASSWORD_ERROR', error.message);
-		}
-	});
-
-	// GAMECONTROLLER EVENTS
+	// GAME CONTROLLER EVENTS
 	socket.on(SocketEvents.Game.StartGame, (lobbyId) => {
 		try {
 			GameController.startGame(lobbyId, socket);
@@ -109,29 +85,45 @@ io.on('connection', (socket) => {
 		}
 	});
 
-	socket.on('end-game', (lobbyId) => {
+	socket.on(SocketEvents.Game.EndGame, (lobbyId) => {
 		try {
-			gameController.endGame(lobbyId, socket);
+			GameController.endGame(lobbyId, socket);
 		} catch (error) {
 			errorHandler(socket, ErrorTypes.END_GAME, error.message);
 		}
 	});
 
-	socket.on('player-ready', (lobbyId) => {
-		try {
-			gameController.playerReady(lobbyId, socket);
-		} catch (error) {
-			errorHandler(socket, ErrorTypes.PLAYER_READY, error.message);
-		}
-	});
+	// socket.on('lobby-players-request', (lobbyId, cb) => {
+	// 	try {
+	// 		lobbyController.handleLobbyPlayersRequest(lobbyId, cb);
+	// 	} catch (error) {
+	// 		errorHandler(socket, 'LOBBY_PLAYERS_REQUEST_ERROR', error.message);
+	// 	}
+	// });
 
-	socket.on('submit-sentence', ({ lobbyId, sentence }) => {
-		try {
-			gameController.submitSentence(lobbyId, socket, sentence);
-		} catch (error) {
-			errorHandler(socket, ErrorTypes.SUBMIT_SENTENCE, error.message);
-		}
-	});
+	// socket.on('check-lobby-password', (lobbyId, callback) => {
+	// 	try {
+	// 		lobbyController.checkLobbyPassword(lobbyId, callback);
+	// 	} catch (error) {
+	// 		errorHandler(socket, 'CHECK_PASSWORD_ERROR', error.message);
+	// 	}
+	// });
+
+	// socket.on('player-ready', (lobbyId) => {
+	// 	try {
+	// 		gameController.playerReady(lobbyId, socket);
+	// 	} catch (error) {
+	// 		errorHandler(socket, ErrorTypes.PLAYER_READY, error.message);
+	// 	}
+	// });
+
+	// socket.on('submit-sentence', ({ lobbyId, sentence }) => {
+	// 	try {
+	// 		gameController.submitSentence(lobbyId, socket, sentence);
+	// 	} catch (error) {
+	// 		errorHandler(socket, ErrorTypes.SUBMIT_SENTENCE, error.message);
+	// 	}
+	// });
 });
 
 const PORT = process.env.PORT || 3000;

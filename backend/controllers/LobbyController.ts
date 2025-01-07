@@ -1,15 +1,17 @@
 import { Socket } from "socket.io";
 import { ILobby } from "../Interfaces/ILobby";
-import { CreateLobbyRequest, JoinLobbyRequest } from "../models";
+import { CreateLobbyRequest, JoinLobbyRequest, ExitLobbyRequest, UserStatus, LobbyDto, ListLobbiesResponse } from "../models";
 import { Lobby } from "../schemas/lobby";
 import UserService from "../services/UserService";
 import { io } from "../config/socket";
 import * as HttpStatus from "http-status-codes";
+import LobbyService from "../services/LobbyService";
 
 export class LobbyController
 {
     // init to []?
-    private lobbies: ILobby[];
+    // TODO: local dev
+    private lobbies: ILobby[]; // this will be a db
 
     // POST /lobbies
     public createLobby(req: CreateLobbyRequest)
@@ -20,8 +22,12 @@ export class LobbyController
         lobby.name = req.name;
         lobby.owner = req.owner;
 
-        // lobby.parse(CreateLobbyRequest)
-        // return lobby.parse(LobbyDto)
+        if (req.password)
+            lobby.password = req.password;
+
+        // lobby.save(); TODO: DB call
+
+        return LobbyDto.parse(lobby);
     }
 
     // POST /lobbies/join
@@ -32,14 +38,14 @@ export class LobbyController
             const lobby = this.lobbies.find(l => l.id === req.id);
             const user = UserService.findById(req.userId);
     
-            // TODO: Replace errors with error along with appropriate code
+            // TODO: Replace errors with error along with appropriate http code
             if (!user)
                 throw new Error("User does not exist");
 
             if (!lobby)
                 throw new Error('Lobby not found');
         
-            if (lobby.password && lobby.password !== req.password) 
+            if (lobby.password && lobby.password !== req.password)
                 throw new Error('Incorrect password');
         
             if (lobby.users.length >= lobby.maxUsers) 
@@ -66,5 +72,35 @@ export class LobbyController
         {
             
         }
+    }
+
+    // /lobbies/:id/exit
+    public async exitLobby(req: ExitLobbyRequest, socket: Socket)
+    {
+        // TODO: local dev. get the lobby
+        const lobby = this.lobbies[req.id];
+
+        // does user exist
+        const user = await UserService.findById(req.userId);
+        // is the requesting user already in the lobby
+        if (!lobby.users.includes(user))
+        {
+            throw new Error('User not found');
+        }
+
+        // remove socket/leave socket
+        socket.leave(lobby.id);
+
+        // set user status to disconnected
+        user.status = UserStatus.Offline;
+
+        return HttpStatus.StatusCodes.OK;
+    }
+
+    // TODO: Players in lobby endpoint
+
+    public async listLobbies()
+    {
+        return ListLobbiesResponse.parse(LobbyService.listAllLobbies());
     }
 }

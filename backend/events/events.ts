@@ -5,14 +5,19 @@ export const SocketEvents =
     Lobby: 
     {
         CreateLobby: "create-lobby",
-        UserJoined: "user-joined"
+        UserJoined: "user-joined",
+        LeaveLobby: "leave-lobby",
+        ListAllLobbies: "list-lobbies"
     },
     Game:
     {
-        StartGame: "start-game"
+        StartGame: "start-game",
+        EndGame: "end-game"
     },
     User:
     {
-        SetName: "set-name"
+        CreateUser: "create-user",
+        ListAllUsers: "list-users",
+
     }
 }

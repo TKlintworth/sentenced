@@ -1,5 +1,5 @@
 import { z as Z } from "zod";
-import { UserDto } from "./users";
+import { UserDto } from "./users.ts";
 
 export const GameDto = Z.object({
     id: Z.string(),
@@ -18,11 +18,11 @@ export const CreateGameRequest = Z.object({
 });
 
 export const StartGameRequest = Z.object({
-    lobby: Z.string()
+    id: Z.string()
 });
 
 export const EndGameRequest = Z.object({
-    lobby: Z.string()
+    id: Z.string()
 });
 
 export type CreateGameRequest = Z.infer<typeof CreateGameRequest>;

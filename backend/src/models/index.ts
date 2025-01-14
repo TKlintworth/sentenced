@@ -1,3 +1,4 @@
-export * from "./lobby";
-export * from "./messages";
-export * from "./users";
+export * from "./lobby.ts";
+export * from "./messages.ts";
+export * from "./users.ts";
+export * from "./games.ts";

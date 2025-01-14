@@ -1,6 +1,6 @@
 import { z as Z } from "zod";
-import { MessageDto } from "./messages";
-import { UserDto } from "./users";
+import { MessageDto } from "./messages.ts";
+import { UserDto } from "./users.ts";
 
 export enum LobbyStatus 
 {

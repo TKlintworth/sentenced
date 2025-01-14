@@ -1,6 +1,6 @@
 // THIS CONTROLLER WILL NEED TO HAVE VERY GOOD VALIDATION TO AVOID BAD ACTORS, BECAUSE THEY WILL HAPPEN
 
-import { CreateUserRequest, UpdateUserRequest, UserRequestParams, ListUsersResponse, UserDto } from "../models";
+import { CreateUserRequest, UpdateUserRequest, UserRequestParams, ListUsersResponse, UserDto } from "../models/index.ts";
 import { User } from "../schemas/User.ts";
 import UserService from "../services/UserService.ts";
 import * as HttpStatus from "http-status-codes";

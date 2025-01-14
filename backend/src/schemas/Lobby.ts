@@ -1,20 +1,20 @@
 import { nanoid } from "nanoid";
-import { Message } from "./Message";
-import { User } from "./User";
-import { LobbyStatus } from "../models";
+import { Message } from "./Message.ts";
+import { User } from "./User.ts";
+import { LobbyStatus } from "../models/index.ts";
 
 export class Lobby
 {
-    public name: string;
+    public name: string = "";
     public createdAt: Date;
     public id: string;
     public users: User[] = [];
-    public maxUsers: number;
+    public maxUsers: number = 0;
     public status: LobbyStatus = LobbyStatus.Waiting;
     public game?: string;
     public messages: Message[] = [];
     public password?: string;
-    public owner: string; // eventually our DB will showing the object vs id, more on that later
+    public owner: string = ""; // eventually our DB will showing the object vs id, more on that later
    
     constructor()
     {

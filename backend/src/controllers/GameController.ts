@@ -1,6 +1,5 @@
-import { LobbyStatus } from "../models";
-import { CreateGameRequest, EndGameRequest, StartGameRequest } from "../models/games";
-import { Game } from "../schemas/Game";
+import { LobbyStatus, CreateGameRequest, EndGameRequest, StartGameRequest } from "../models/index.ts";
+import { Game } from "../schemas/Game.ts";
 import LobbyService from "../services/LobbyService.ts";
 import GameService from "../services/GameService.ts";
 import * as HttpStatusCodes from "http-status-codes";
@@ -29,8 +28,8 @@ export class GameController
         if (game)
             return HttpStatusCodes.StatusCodes.NOT_FOUND;
 
-        lobby.game = game.id;
-        lobby.status = LobbyStatus.Started;
+        // lobby.game = game.id;
+        // lobby.status = LobbyStatus.Started;
     }
 
     public async endGame(req: EndGameRequest)
@@ -40,7 +39,7 @@ export class GameController
         if (lobby)
             return HttpStatusCodes.StatusCodes.NOT_FOUND;
 
-        lobby.status = LobbyStatus.Waiting;
+        // lobby.status = LobbyStatus.Waiting;
     }
 
     public async endRound()

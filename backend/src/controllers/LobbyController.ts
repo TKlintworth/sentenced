@@ -1,11 +1,11 @@
 import { Socket } from "socket.io";
-import { ILobby } from "../Interfaces/ILobby";
-import { CreateLobbyRequest, JoinLobbyRequest, LeaveLobbyRequest, UserStatus, LobbyDto, ListLobbiesResponse } from "../models";
-import { Lobby } from "../schemas/Lobby";
-import UserService from "../services/UserService";
-import { io } from "../config/socket";
+import { ILobby } from "../Interfaces/ILobby.ts";
+import { CreateLobbyRequest, JoinLobbyRequest, LeaveLobbyRequest, UserStatus, LobbyDto, ListLobbiesResponse } from "../models/index.ts";
+import { Lobby } from "../schemas/Lobby.ts";
+import UserService from "../services/UserService.ts";
+//import { io } from "../config/socket";
 import * as HttpStatus from "http-status-codes";
-import LobbyService from "../services/LobbyService";
+import LobbyService from "../services/LobbyService.ts";
 
 export default class LobbyController
 {
@@ -60,7 +60,7 @@ export default class LobbyController
             // Send a message to the user that they have successfully joined the lobby
             socket.to(lobby.id).emit('user-joined-lobby', user);
             socket.emit('lobby-joined', lobby.id);
-            io.emit('lobby-updated', lobby.id);
+            //io.emit('lobby-updated', lobby.id);
 
             return HttpStatus.StatusCodes.ACCEPTED; // TODO: Does this correctly return to the client?
         }
@@ -79,10 +79,11 @@ export default class LobbyController
         // does user exist
         const user = await UserService.findById(req.userId);
         // is the requesting user already in the lobby
-        if (!lobby.users.includes(user))
-        {
-            throw new Error('User not found');
-        }
+        
+        // if (!lobby.users.includes(user))
+        // {
+        //     throw new Error('User not found');
+        // }
 
         // remove socket/leave socket
         socket.leave(lobby.id);

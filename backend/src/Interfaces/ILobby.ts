@@ -1,5 +1,5 @@
-import { Message } from "../src/schemas/Message";
-import { User } from "../src/schemas/User";
+import { Message } from "../schemas/Message";
+import { User } from "../schemas/User";
 import { LobbyStatus } from "../models";
 
 export interface ILobby

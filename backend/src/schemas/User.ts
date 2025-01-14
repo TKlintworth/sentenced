@@ -1,9 +1,9 @@
 import { nanoid } from "nanoid";
-import { UserStatus } from "../models/users";
+import { UserStatus } from "../models/users.ts";
 
 export class User
 {
-    public name: string;
+    public name: string = "";
     public email?: string;
     public password?: string;
     public createdAt: Date;

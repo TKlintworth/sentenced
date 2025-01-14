@@ -1,7 +1,8 @@
 import { LobbyStatus } from "../models";
-import { CreateGameRequest } from "../models/games";
+import { CreateGameRequest, EndGameRequest, StartGameRequest } from "../models/games";
 import { Game } from "../schemas/Game";
-import LobbyService from "../services/LobbyService";
+import LobbyService from "../services/LobbyService.ts";
+import GameService from "../services/GameService.ts";
 import * as HttpStatusCodes from "http-status-codes";
 
 export class GameController

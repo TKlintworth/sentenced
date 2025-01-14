@@ -35,7 +35,7 @@ export const JoinLobbyRequest = Z.object({
     password: Z.string().optional()
 });
 
-export const ExitLobbyRequest = Z.object({
+export const LeaveLobbyRequest = Z.object({
     id: Z.string(),
     userId: Z.string()
 });
@@ -46,5 +46,5 @@ export const ListLobbiesResponse = Z.object({
 
 export type CreateLobbyRequest = Z.infer<typeof CreateLobbyRequest>;
 export type JoinLobbyRequest = Z.infer<typeof JoinLobbyRequest>;
-export type ExitLobbyRequest = Z.infer<typeof ExitLobbyRequest>;
+export type LeaveLobbyRequest = Z.infer<typeof LeaveLobbyRequest>;
 export type ListLobbiesResponse = Z.infer<typeof ListLobbiesResponse>;

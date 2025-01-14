@@ -23,7 +23,11 @@ export const CreateUserRequest = Z.object({
     name: Z.string()
 });
 
-export const GetUserRequestParams = Z.object({
+export const UpdateUserRequest = Z.object({
+    name: Z.string()
+});
+
+export const UserRequestParams = Z.object({
     id: Z.string()
 });
 
@@ -32,5 +36,6 @@ export const ListUsersResponse = Z.object({
 });
 
 export type CreateUserRequest = Z.infer<typeof CreateUserRequest>;
-export type GetUserRequestParams = Z.infer<typeof GetUserRequestParams>;
+export type UserRequestParams = Z.infer<typeof UserRequestParams>;
 export type ListUsersResponse = Z.infer<typeof ListUsersResponse>;
+export type UpdateUserRequest = Z.infer<typeof UpdateUserRequest>;

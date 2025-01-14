@@ -1,27 +1,36 @@
-import express from 'express';
+import express, { Express } from 'express';
 import http from 'http';
-import { io } from './config/socket.js';
-import { GameController } from './controllers/GameController';
-import { LobbyController } from './controllers/LobbyController';
-import { UserController } from './controllers/UserController';
+import { Server } from 'socket.io';
+import UserController from './controllers/UserController.ts';
+import LobbyController from './controllers/LobbyController.ts';
+import { GameController } from './controllers/GameController.ts';
 import { errorHandler } from './utils/errorHandler.js';
 import { ErrorTypes } from './utils/constants.js';
 import { SocketEvents } from './events/events.js';
+import { CreateUserRequest, CreateLobbyRequest, JoinLobbyRequest, LeaveLobbyRequest } from './models/index.ts';
 
-const app = express();
+const app: Express = express();
 const httpServer = http.createServer(app);
+const io = new Server(httpServer, {
+	cors: {
+		origin: ["https://admin.socket.io/", "http://localhost:5173", "http://localhost:3000"],
+		credentials: true,
+	}
+});
 
-io.attach(httpServer);
+const gameController = new GameController();
+
+// io.attach(httpServer);
 
 io.on('connection', (socket) => {
 	// Now the socket represents a connection to a specific client
-	userController.handleUserConnection(socket);
 
 	// USER CONTROLLER EVENTS
-	socket.on(SocketEvents.User.CreateUser, (name) => {
+	socket.on(SocketEvents.CREATE_USER, (req: CreateUserRequest) => {
 		try {
-			userController.handleSetName(name, socket);
-		} catch (error) {
+			UserController.createUser(req);
+			
+		} catch (error: any) {
 			errorHandler(socket, 'SET_NAME_ERROR', error.message);
 		}
 	});
@@ -35,63 +44,63 @@ io.on('connection', (socket) => {
 	// 	}
 	// });
 
-	socket.on(SocketEvents.User.ListAllUsers, () => {
+	socket.on(SocketEvents.LIST_ALL_USERS, () => {
 		try {
 			UserController.listUsers();
-		} catch (error) {
+		} catch (error: any) {
 			errorHandler(socket, 'PLAYERS_REQUEST_ERROR', error.message);
 		}
 	});
 
 	// LOBBY CONTROLLER EVENTS
-	socket.on(SocketEvents.Lobby.CreateLobby, (lobbyData) => {
+	socket.on(SocketEvents.CREATE_LOBBY, (req: CreateLobbyRequest) => {
 		try {
-			LobbyController.createLobby(lobbyData, socket);
-		} catch (error) {
+			LobbyController.createLobby(req);
+		} catch (error: any) {
 			errorHandler(socket, 'CREATE_LOBBY_ERROR', error.message);
 		}
 	});
 
-	socket.on(SocketEvents.Lobby.ListAllLobbies, () => {
+	socket.on(SocketEvents.LIST_LOBBIES, () => {
 		try {
 			LobbyController.listLobbies();
-		} catch (error) {
+		} catch (error: any) {
 			errorHandler(socket, 'LIST_LOBBIES_ERROR', error.message);
 		}
 	});
 
-	socket.on(SocketEvents.Lobby.UserJoined, (lobbyId, password) => {
+	socket.on(SocketEvents.JOIN_LOBBY, (req: JoinLobbyRequest) => {
 		try {
-			LobbyController.joinLobby(lobbyId, socket, password);
-		} catch (error) {
+			LobbyController.joinLobby(req, socket);
+		} catch (error: any) {
 			errorHandler(socket, 'JOIN_LOBBY_ERROR', error.message);
 		}
 	});
 
-	socket.on(SocketEvents.Lobby.LeaveLobby, (lobbyId) => {
+	socket.on(SocketEvents.LEAVE_LOBBY, (req: LeaveLobbyRequest) => {
 		try {
-			lobbyController.handleLobbyLeaveAttempt(lobbyId, socket);
-		} catch (error) {
-			errorHandler(socket, 'LEAVE_LOBBY_ERROR', error.message);
+			LobbyController.leaveLobby(req, socket);
+		} catch (error: any) {
+			errorHandler(socket, ErrorTypes.LEAVE_LOBBY, error.message);
 		}
 	});
 
 	// GAME CONTROLLER EVENTS
-	socket.on(SocketEvents.Game.StartGame, (lobbyId) => {
-		try {
-			GameController.startGame(lobbyId, socket);
-		} catch (error) {
-			errorHandler(socket, ErrorTypes.START_GAME, error.message);
-		}
-	});
+	//socket.on(SocketEvents.Game.StartGame, (lobbyId) => {
+	//	try {
+	//		GameController.startGame(lobbyId, socket);
+	//	} catch (error) {
+	//		errorHandler(socket, ErrorTypes.START_GAME, error.message);
+	//	}
+	//});
 
-	socket.on(SocketEvents.Game.EndGame, (lobbyId) => {
-		try {
-			GameController.endGame(lobbyId, socket);
-		} catch (error) {
-			errorHandler(socket, ErrorTypes.END_GAME, error.message);
-		}
-	});
+	//socket.on(SocketEvents.Game.EndGame, (lobbyId) => {
+	//	try {
+	//		GameController.endGame(lobbyId, socket);
+	//	} catch (error) {
+	//		errorHandler(socket, ErrorTypes.END_GAME, error.message);
+	//	}
+	//});
 
 	// socket.on('lobby-players-request', (lobbyId, cb) => {
 	// 	try {
@@ -129,12 +138,12 @@ io.on('connection', (socket) => {
 const PORT = process.env.PORT || 3000;
 httpServer.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
-process.on('uncaughtException', (error) => {
+process.on('uncaughtException', (error: Error) => {
 	console.error('Uncaught Exception: ', error);
 	process.exit(1);
 });
 
-process.on('unhandledRejection', (reason, promise) => {
+process.on('unhandledRejection', (reason: any, promise: Promise<any>) => {
 	console.error('Unhandled Rejection at: ', promise, 'reason: ', reason);
 	process.exit(1);
 });

@@ -1,14 +1,14 @@
 // THIS CONTROLLER WILL NEED TO HAVE VERY GOOD VALIDATION TO AVOID BAD ACTORS, BECAUSE THEY WILL HAPPEN
 
-import { CreateUserRequest, GetUserRequestParams, ListUsersResponse, UserDto } from "../models";
-import { User } from "../schemas/User";
-import UserService from "../services/UserService";
+import { CreateUserRequest, UpdateUserRequest, UserRequestParams, ListUsersResponse, UserDto } from "../models";
+import { User } from "../schemas/User.ts";
+import UserService from "../services/UserService.ts";
 import * as HttpStatus from "http-status-codes";
 
-export class UserController
+export default class UserController
 {
     // /users
-    public async createUser(req: CreateUserRequest)
+    static async createUser(req: CreateUserRequest)
     {
         const user = new User();
         
@@ -16,8 +16,16 @@ export class UserController
         // user.save(); // TODO: do this
     }
 
+    static async updateUser(params: UserRequestParams, req: UpdateUserRequest)
+    {
+        const user = await UserService.findById(params.id);
+
+        // user.name = req.name;
+        // user.save();
+    }
+
     // /users/:id
-    public async getUser(params: GetUserRequestParams)
+    static async getUser(params: UserRequestParams)
     {
         const user = UserService.findById(params.id);
 
@@ -28,7 +36,7 @@ export class UserController
     }
 
     // /users
-    public async listUsers()
+    static async listUsers()
     {
         const users = UserService.listUsers();
 

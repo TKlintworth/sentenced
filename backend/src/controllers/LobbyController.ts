@@ -1,20 +1,16 @@
 import { Socket } from "socket.io";
 import { ILobby } from "../Interfaces/ILobby";
-import { CreateLobbyRequest, JoinLobbyRequest, ExitLobbyRequest, UserStatus, LobbyDto, ListLobbiesResponse } from "../models";
-import { Lobby } from "../schemas/lobby";
+import { CreateLobbyRequest, JoinLobbyRequest, LeaveLobbyRequest, UserStatus, LobbyDto, ListLobbiesResponse } from "../models";
+import { Lobby } from "../schemas/Lobby";
 import UserService from "../services/UserService";
 import { io } from "../config/socket";
 import * as HttpStatus from "http-status-codes";
 import LobbyService from "../services/LobbyService";
 
-export class LobbyController
+export default class LobbyController
 {
-    // init to []?
-    // TODO: local dev
-    private lobbies: ILobby[]; // this will be a db
-
     // POST /lobbies
-    public createLobby(req: CreateLobbyRequest)
+    static createLobby(req: CreateLobbyRequest)
     {
         const lobby = new Lobby();
 
@@ -31,11 +27,11 @@ export class LobbyController
     }
 
     // POST /lobbies/join
-    public joinLobby(req: JoinLobbyRequest, socket: Socket)
+    static async joinLobby(req: JoinLobbyRequest, socket: Socket)
     {
         try
         {
-            const lobby = this.lobbies.find(l => l.id === req.id);
+            const lobby = await LobbyService.findById(req.id);
             const user = UserService.findById(req.userId);
     
             // TODO: Replace errors with error along with appropriate http code
@@ -51,8 +47,8 @@ export class LobbyController
             if (lobby.users.length >= lobby.maxUsers) 
                 throw new Error('Lobby is full');
         
-            if (lobby.users[req.userId] !== undefined)
-                throw new Error('You are already in this lobby');
+            // if (lobby.users[req.userId] !== undefined)
+            //     throw new Error('You are already in this lobby');
         
             socket.join(lobby.id);
             console.log(`User ${socket.id} joined lobby ${lobby.name}, ${lobby.id}`);
@@ -74,11 +70,11 @@ export class LobbyController
         }
     }
 
-    // /lobbies/:id/exit
-    public async exitLobby(req: ExitLobbyRequest, socket: Socket)
+    // /lobbies/:id/lobby
+    static async leaveLobby(req: LeaveLobbyRequest, socket: Socket)
     {
         // TODO: local dev. get the lobby
-        const lobby = this.lobbies[req.id];
+        const lobby = await LobbyService.findById(req.id);
 
         // does user exist
         const user = await UserService.findById(req.userId);
@@ -99,7 +95,7 @@ export class LobbyController
 
     // TODO: Players in lobby endpoint
 
-    public async listLobbies()
+    static async listLobbies()
     {
         return ListLobbiesResponse.parse(LobbyService.listAllLobbies());
     }
